@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import BigNumber from 'bignumber.js';
+
 
 import { Typography, Paper, Button, CircularProgress, TextField, InputAdornment } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -12,7 +14,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import classes from './define.module.css';
 
 import stores from '../../../stores/index.js';
-import { ERROR, ACCOUNT_CHANGED, CONNECT_WALLET, INCENTIVES_CONFIGURED } from '../../../stores/constants';
+import { ERROR, ACCOUNT_CHANGED, CONNECT_WALLET, INCENTIVES_CONFIGURED, SEARCH_TOKEN, SEARCH_TOKEN_RETURNED, ADD_REWARD, ADD_REWARD_RETURNED } from '../../../stores/constants';
 
 import { formatCurrency, formatAddress } from '../../../utils';
 
@@ -71,36 +73,73 @@ const searchTheme = createTheme({
 function Voting({ changeTheme, theme }) {
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
-  const [account, setAccount] = useState(null);
+  const [ web3, setWeb3 ] = useState(null)
+
+  const [ loading, setLoading ] = useState(false);
+  const [ account, setAccount ] = useState(null);
+
+  const [ searching, setSearching ] = useState(false)
   const [ search, setSearch ] = useState('')
-  const [ gauges, setGauges ] = useState([])
+  const [ gauge, setGauge ] = useState([])
 
-  const [ rewardToken, setRewardToken ] = useState('')
-
+  const [ rewardTokenAddress, setRewardTokenAddress ] = useState('')
+  const [ rewardAmount, setRewardAmount ] = useState('')
+  const [ rewardAmountError, setRewardAmountError ] = useState(false)
+  const [ rewardToken, setRewardToken ] = useState()
 
   const onConnectWallet = () => {
     stores.emitter.emit(CONNECT_WALLET);
   };
 
-  useEffect(function () {
-    const accountChanged = () => {
+  useEffect(async function () {
+    const accountChanged = async () => {
       setAccount(stores.accountStore.getStore('account'))
+      setWeb3(await stores.accountStore.getWeb3Provider())
     }
 
-    const configureReturned = () => {
-      setGauges(stores.incentivesStore.getStore('gauges'))
+    const configureReturned = async () => {
+      const gs = stores.incentivesStore.getStore('gauges')
+      const v = gs.filter((gg) => { return gg.gaugeAddress === router.query.address });
+      if(v.length > 0) {
+        setGauge(v[0])
+      }
+      setWeb3(await stores.accountStore.getWeb3Provider())
+    }
+
+    const searchReturned = (token) => {
+      setSearching(false)
+      setRewardToken(token)
+    }
+
+    const addRewardReturned = () => {
+      setLoading(false)
+      router.push(`/`);
+    }
+
+    const errorReturned = () => {
+      setLoading(false)
     }
 
     setAccount(stores.accountStore.getStore('account'))
+    stores.emitter.on(ERROR, errorReturned)
     stores.emitter.on(ACCOUNT_CHANGED, accountChanged);
     stores.emitter.on(INCENTIVES_CONFIGURED, configureReturned)
+    stores.emitter.on(SEARCH_TOKEN_RETURNED, searchReturned)
+    stores.emitter.on(ADD_REWARD_RETURNED, addRewardReturned);
 
-    setGauges(stores.incentivesStore.getStore('gauges'))
+    const gs = stores.incentivesStore.getStore('gauges')
+    const v = gs.filter((gg) => { return gg.gaugeAddress === router.query.address });
+    if(v.length > 0) {
+      setGauge(v[0])
+    }
+    setWeb3(await stores.accountStore.getWeb3Provider())
 
     return () => {
+      stores.emitter.removeListener(ERROR, errorReturned)
       stores.emitter.removeListener(ACCOUNT_CHANGED, accountChanged);
-      stores.emitter.removeListener(INCENTIVES_CONFIGURED, configureReturned)
+      stores.emitter.removeListener(INCENTIVES_CONFIGURED, configureReturned);
+      stores.emitter.removeListener(SEARCH_TOKEN_RETURNED, searchReturned);
+      stores.emitter.removeListener(ADD_REWARD_RETURNED, addRewardReturned);
     };
   }, []);
 
@@ -108,16 +147,34 @@ function Voting({ changeTheme, theme }) {
     setSearch(event.target.value)
   }
 
-  const onChoose = (pool) => {
-    router.push(`/add/${pool.gaugeAddress}`);
+  const onSubmit = () => {
+    setLoading(true)
+    stores.dispatcher.dispatch({ type: ADD_REWARD, content: { rewardToken, rewardAmount, gauge } })
   }
 
   const onBackClicked = () => {
     router.push(`/`);
   }
 
-  const onRewardTokenChanged = (e) => {
-    setRewardToken(e.target.value)
+  const onRewardTokenAddressChanged = (e) => {
+    setRewardTokenAddress(e.target.value)
+  }
+
+  const onRewardAmountChanged = (e) => {
+    let inputAmount = e.target.value
+
+    if(isNaN(inputAmount) || BigNumber(inputAmount).times(10**rewardToken.decimals).gt(rewardToken.balance)) {
+      setRewardAmountError(true)
+    } else {
+      setRewardAmountError(false)
+    }
+
+    setRewardAmount(e.target.value)
+  }
+
+  const onSearch = () => {
+    setSearching(true)
+    stores.dispatcher.dispatch({ type: SEARCH_TOKEN, content: { address: rewardTokenAddress }  })
   }
 
   return (
@@ -133,8 +190,8 @@ function Voting({ changeTheme, theme }) {
             <div className={ classes.selectedField }>
               <img src='/unknown-logo.png' width='55px' height='55px' className={ classes.assetIcon } />
               <div className={ classes.assetDetails }>
-                <Typography className={ classes.assetNameText }>Name</Typography>
-                <Typography color='textSecondary' className={ classes.assetNameSubText }>0x123abc...123</Typography>
+                <Typography className={ classes.assetNameText }>{ gauge ? gauge.name : ''}</Typography>
+                <Typography color='textSecondary' className={ classes.assetNameSubText }>{ gauge ? formatAddress(gauge.gaugeAddress) : '' }</Typography>
               </div>
               <Typography className={ classes.selectedPoolText } color='textSecondary'>Selected Pool</Typography>
             </div>
@@ -145,8 +202,8 @@ function Voting({ changeTheme, theme }) {
                 variant="outlined"
                 fullWidth
                 placeholder="0x00000000000000"
-                value={ rewardToken }
-                onChange={ onRewardTokenChanged }
+                value={ rewardTokenAddress }
+                onChange={ onRewardTokenAddressChanged }
                 InputProps={{
                   endAdornment: (
                     <Button
@@ -154,8 +211,10 @@ function Voting({ changeTheme, theme }) {
                       variant='contained'
                       color='primary'
                       className={ classes.inputButton }
+                      onClick={ onSearch }
+                      disabled={ searching || !web3 || !web3.utils || !web3.utils.isAddress(rewardTokenAddress) }
                       >
-                      <Typography>Submit</Typography>
+                      <Typography>{ searching ? 'Searching ...' : 'Search'}</Typography>
                     </Button>
                   )
                 }}
@@ -168,13 +227,23 @@ function Voting({ changeTheme, theme }) {
                 variant="outlined"
                 fullWidth
                 placeholder="0.00"
-                value={ rewardToken }
-                onChange={ onRewardTokenChanged }
+                value={ rewardAmount }
+                onChange={ onRewardAmountChanged }
+                error={ rewardAmountError }
+                disabled={!rewardToken}
                 InputProps={{
                   endAdornment: (
                     <div>
                       <Typography color='textSecondary' className={ classes.availableText }>Available</Typography>
-                      <Typography color='textSecondary' className={ classes.availableText }>0.00</Typography>
+                      <Typography color='textSecondary' className={ classes.availableText }>{ rewardToken && formatCurrency(BigNumber(rewardToken.balance).div(10**rewardToken.decimals)) }</Typography>
+                    </div>
+                  ),
+                  startAdornment: (
+                    <div>
+                      {
+                        rewardToken && rewardToken.address &&
+                        <img width={30} height={30} style={{marginRight: 12}} src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${web3 && web3.utils ? web3.utils.toChecksumAddress(rewardToken.address) : rewardToken.address}/logo.png`} />
+                      }
                     </div>
                   )
                 }}
@@ -187,8 +256,10 @@ function Voting({ changeTheme, theme }) {
                 variant='contained'
                 color='primary'
                 fullWidth
+                onClick={ onSubmit }
+                disabled={ loading }
                 >
-                <Typography>Submit</Typography>
+                <Typography>{ loading ? 'Submitting ...' : 'Submit'}</Typography>
               </Button>
             </div>
           </Paper>

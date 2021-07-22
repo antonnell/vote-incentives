@@ -22,10 +22,9 @@
   flex-direction: column;
   gap: 10px;
   position: sticky;
-  top: 10rem;
   height: fit-content;
   justify-content: center;
-  top: 6rem;
+  top: 4rem;
   align-items: center;
 }
 
@@ -53,6 +52,7 @@
   top: 0;
   background: #141C2F;
   z-index: 1;
+  border-bottom: 1px solid #1C253C;
 }
 
 .listContainer {

@@ -14,6 +14,10 @@ import {
   GAUGE_CONTROLLER_ADDRESS,
   CLAIM_REWARD,
   REWARD_CLAIMED,
+  SEARCH_TOKEN,
+  SEARCH_TOKEN_RETURNED,
+  ADD_REWARD,
+  ADD_REWARD_RETURNED
 } from './constants';
 
 import { ERC20_ABI, BRIBERY_ABI, GAUGE_CONTROLLER_ABI, GAUGE_CONTRACT_ABI } from './abis';
@@ -39,6 +43,7 @@ class Store {
 
     dispatcher.register(
       function (payload) {
+        console.log(payload.type)
         switch (payload.type) {
           case CONFIGURE_INCENTIVES:
             this.configure(payload);
@@ -48,6 +53,12 @@ class Store {
             break;
           case CLAIM_REWARD:
             this.claimReward(payload);
+            break;
+          case SEARCH_TOKEN:
+            this.searchToken(payload);
+            break;
+          case ADD_REWARD:
+            this.addReward(payload);
             break;
           default: {
           }
@@ -181,7 +192,6 @@ class Store {
     let rewards = []
 
     for(let i = 0; i < gauges.length; i++) {
-      console.log(bribery[i])
       if(bribery[i].canClaim) {
         rewards.push({
           amount: bribery[i].claimable,
@@ -198,17 +208,24 @@ class Store {
     this.emitter.emit(INCENTIVES_BALANCES_RETURNED, []);
   };
 
-  _getTokenInfo = async (web3, tokenAddress) => {
+  _getTokenInfo = async (web3, tokenAddress, getBalance) => {
     try {
       const token = new web3.eth.Contract(ERC20_ABI, tokenAddress)
 
       const symbol = await token.methods.symbol().call()
       const decimals = parseInt(await token.methods.decimals().call())
+      let balance = 0
+
+      if(getBalance) {
+        const account = await stores.accountStore.getStore('account');
+        balance = await token.methods.balanceOf(account.address).call()
+      }
 
       return {
         address: tokenAddress,
         symbol,
-        decimals
+        decimals,
+        balance
       }
 
     } catch(ex) {
@@ -252,7 +269,7 @@ class Store {
     return briberyResults
   }
 
-  claimReward = async () => {
+  claimReward = async (payload) => {
     const account = stores.accountStore.getStore('account');
     if (!account) {
       return false;
@@ -275,11 +292,73 @@ class Store {
   }
 
   _callClaimReward = async (web3, account, gauge, rewardToken, callback) => {
-
     const bribery = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_ADDRESS);
     const gasPrice = await stores.accountStore.getGasPrice();
 
-    this._callContract(web3, bribery, 'claim_reward', [gauge, rewardToken], account, gasPrice, GET_INCENTIVES_BALANCES, callback);
+    this._callContractWait(web3, bribery, 'claim_reward', [gauge, rewardToken], account, gasPrice, GET_INCENTIVES_BALANCES, {}, callback);
+  };
+
+  searchToken = async (payload) => {
+    const web3 = await stores.accountStore.getWeb3Provider();
+    if (!web3) {
+      return false;
+    }
+
+    const { address } = payload.content;
+
+    try {
+      const token = await this._getTokenInfo(web3, address, true)
+      return this.emitter.emit(SEARCH_TOKEN_RETURNED, token);
+    } catch(ex) {
+      console.log(ex)
+      return this.emitter.emit(ERROR, ex)
+    }
+  }
+
+  addReward = async (payload) => {
+    const account = stores.accountStore.getStore('account');
+    if (!account) {
+      return false;
+    }
+
+    const web3 = await stores.accountStore.getWeb3Provider();
+    if (!web3) {
+      return false;
+    }
+
+    const { rewardToken, rewardAmount, gauge } = payload.content;
+
+    let sendAmount = BigNumber(rewardAmount).times(10**rewardToken.decimals).toFixed(0)
+
+    this._checkAllowance(web3, rewardToken.address, account.address, BRIBERY_ADDRESS, sendAmount, () => {
+      this._callAddReward(web3, account, gauge.gaugeAddress, rewardToken.address, sendAmount, (err, res) => {
+        if (err) {
+          return this.emitter.emit(ERROR, err);
+        }
+
+        return this.emitter.emit(REWARD_CLAIMED, res);
+      });
+    })
+
+  }
+
+  _checkAllowance = async (web3, token, owner, spender, spendingAmount, callback) => {
+    const tokenContract = new web3.eth.Contract(ERC20_ABI, token)
+    const allowance = await tokenContract.methods.allowance(owner, spender).call();
+
+    if(BigNumber(spendingAmount).lte(allowance)) {
+      callback()
+    } else {
+      const gasPrice = await stores.accountStore.getGasPrice();
+      this._callContractWait(web3, tokenContract, 'approve', [spender, MAX_UINT256], { address: owner }, gasPrice, null, null, callback)
+    }
+  }
+
+  _callAddReward = async (web3, account, gauge, rewardToken, rewardAmount, callback) => {
+    const bribery = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_ADDRESS);
+    const gasPrice = await stores.accountStore.getGasPrice();
+
+    this._callContractWait(web3, bribery, 'add_reward_amount', [gauge, rewardToken, rewardAmount], account, gasPrice, GET_INCENTIVES_BALANCES, {}, callback);
   };
 
   _callContract = (web3, contract, method, params, account, gasPrice, dispatchEvent, dispatchEventPayload, callback) => {

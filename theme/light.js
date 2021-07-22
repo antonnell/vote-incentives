@@ -38,6 +38,10 @@ const theme = createTheme({
           backgroundColor: '#0053FF !important',
           color: '#fff'
         }
+      }, 
+      contained: {
+        ...coreTheme.overrides.MuiButton.contained,
+        backgroundColor: '#fff'
       }
     },
     MuiInputBase: {

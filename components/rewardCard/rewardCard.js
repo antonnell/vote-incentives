@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Paper, Grid, Button, FormControlLabel, Checkbox } from '@material-ui/core'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import RedeemIcon from '@material-ui/icons/Redeem';
@@ -9,7 +9,7 @@ import classes from './rewardCard.module.css'
 import stores from '../../stores/index.js'
 import { getProvider, formatCurrency } from '../../utils'
 
-import { CLAIM_REWARD } from '../../stores/constants';
+import { CLAIM_REWARD, ERROR, REWARD_CLAIMED } from '../../stores/constants';
 
 const theme = createTheme({
   palette: {
@@ -59,10 +59,32 @@ const theme = createTheme({
 export default function RewardCard({ reward }) {
 
   const [ checked, setChecked ] = useState(false)
+  const [ claiming, setClaiming ] = useState(false)
 
   const onClaim = () => {
-    stores.dispatcher.dispatch({ type: CLAIM_REWARD, content: { reward }})
+    if(!claiming) {
+      stores.dispatcher.dispatch({ type: CLAIM_REWARD, content: { reward }})
+      setClaiming(true)
+    }
   }
+
+  useEffect(function () {
+    const errorReturned = () => {
+      setClaiming(false)
+    }
+
+    const claimReturned = () => {
+      setClaiming(false)
+    }
+
+    stores.emitter.on(ERROR, errorReturned);
+    stores.emitter.on(REWARD_CLAIMED, claimReturned)
+
+    return () => {
+      stores.emitter.removeListener(ERROR, errorReturned);
+      stores.emitter.removeListener(REWARD_CLAIMED, claimReturned)
+    };
+  }, []);
 
   return (
     <Paper elevation={ 1 } className={ classes.chainContainer } key={ reward.id } >
@@ -78,7 +100,7 @@ export default function RewardCard({ reward }) {
             onClick={ onClaim }
             color='primary'
           >
-            <Typography className={ classes.buttonLabel }>Claim Reward</Typography>
+            <Typography className={ classes.buttonLabel }>{ claiming ? 'Claiming ...' : 'Claim Reward'}</Typography>
           </Button>
         </div>
       </ThemeProvider>

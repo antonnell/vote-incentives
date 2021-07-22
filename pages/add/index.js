@@ -170,7 +170,15 @@ function Voting({ changeTheme, theme }) {
           </div>
           <div className={ classes.tableBody }>
             { gauges && gauges.length > 0 &&
-              gauges.map((gauge) => {
+              gauges.filter((gauge) => {
+                if(search) {
+                  return gauge.name.toLowerCase().includes(search.toLowerCase()) ||
+                    gauge.gaugeAddress.toLowerCase().includes(search.toLowerCase()) ||
+                    gauge.lpTokenAddress.toLowerCase().includes(search.toLowerCase())
+                }
+
+                return true
+              }).map((gauge) => {
                 return (
                   <div className={ classes.tableRow }>
                     <div className={ classes.poolRow }>

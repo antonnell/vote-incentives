@@ -42,5 +42,11 @@ export const INCENTIVES_BALANCES_RETURNED = 'INCENTIVES_BALANCES_RETURNED';
 export const CLAIM_REWARD = 'CLAIM_REWARD'
 export const REWARD_CLAIMED = 'REWARD_CLAIMED'
 
+export const SEARCH_TOKEN = 'SEARCH_TOKEN'
+export const SEARCH_TOKEN_RETURNED = 'SEARCH_TOKEN_RETURNED'
+
+export const ADD_REWARD = 'ADD_REWARD'
+export const ADD_REWARD_RETURNED = 'ADD_REWARD_RETURNED'
+
 export const MAX_UINT256 = new BigNumber(2).pow(256).minus(1).toFixed(0);
 export const WEEK = BigNumber(86400).times(7).toFixed(0);
