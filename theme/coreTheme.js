@@ -152,6 +152,9 @@ const coreTheme = {
           backgroundColor: colors.blue+' !important',
           color: '#fff'
         }
+      },
+      outlined: {
+        borderRadius: '32px'
       }
     },
     MuiDialog: {

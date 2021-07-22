@@ -38,7 +38,7 @@
 
 .actionContainer {
   position: absolute;
-  top: 190px;
+  top: 183px;
   left: 0;
   right: 0;
   margin: auto;
@@ -105,4 +105,8 @@
 .bigButton {
   max-width: 600px !important;
   margin: 0 auto;
+}
+
+.inputButton {
+  box-shadow: none !important;
 }

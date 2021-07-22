@@ -63,7 +63,7 @@ const searchTheme = createTheme({
         padding: '34px 50px'
       },
       notchedOutline: {
-        borderColor: "#FFF",
+        borderColor: "transparent",
       },
       adornedEnd: {
         paddingRight: '40px'
@@ -145,7 +145,7 @@ function Voting({ changeTheme, theme }) {
                     </InputAdornment>,
                     startAdornment: <InputAdornment position="start">
                       <Typography className={ classes.searchInputAdnornment }>
-                        Search Pools
+                        Search Pools:
                       </Typography>
                     </InputAdornment>
                   }}
@@ -155,10 +155,10 @@ function Voting({ changeTheme, theme }) {
           </div>
         </div>
         <div className={ classes.tableContainer }>
-          <div className={ classes.tableHeader }>
+          <div className={ theme.palette.type === 'dark' ? classes.tableHeaderDark : classes.tableHeader }>
             <div className={ classes.tableHeaderRow }>
               <div className={ classes.poolRow }>
-                <Typography className={ classes.tableHeaderText }>Pool</Typography>
+                <Typography className={ `${classes.tableHeaderText} ${classes.poolHeaderText}` }>Pool</Typography>
               </div>
               <div className={ classes.typeRow }>
                 <Typography className={ classes.tableHeaderText }>Chain</Typography>

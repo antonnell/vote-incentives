@@ -67,10 +67,74 @@ const searchTheme = createTheme({
     },
     MuiOutlinedInput: {
       input: {
-        padding: '12.5px 14px'
+        padding: '34px 50px'
       },
       notchedOutline: {
-        borderColor: "#FFF",
+        borderColor: "transparent",
+      },
+      adornedEnd: {
+        paddingRight: '40px'
+      },
+      adornedStart: {
+        paddingLeft: '40px'
+      }
+    },
+  },
+});
+
+const searchThemeDark = createTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      main: '#2F80ED',
+    },
+  },
+  shape: {
+    borderRadius: '10px'
+  },
+  typography: {
+    fontFamily: [
+      'Inter',
+      'Arial',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    body1: {
+      fontSize: '12px'
+    }
+  },
+  overrides: {
+    MuiPaper: {
+      elevation1: {
+        "box-shadow": '0px 7px 7px #0000000A;',
+        "-webkit-box-shadow": '0px 7px 7px #0000000A;',
+        "-moz-box-shadow": '0px 7px 7px #0000000A;',
+      }
+    },
+    MuiInputBase: {
+      input: {
+        fontSize: '14px'
+      },
+    },
+    MuiOutlinedInput: {
+      input: {
+        padding: '34px 50px'
+      },
+      notchedOutline: {
+        borderColor: "transparent",
+      },
+      adornedEnd: {
+        paddingRight: '40px'
+      },
+      adornedStart: {
+        paddingLeft: '40px'
       }
     },
   },
@@ -137,7 +201,6 @@ function Voting({ changeTheme, theme }) {
                 account &&
                   <Button
                   size='large'
-                  color='secondary'
                   variant='contained'
                   className={ classes.addNetworkButton }
                   onClick={ onAddReward }
@@ -160,27 +223,25 @@ function Voting({ changeTheme, theme }) {
         <div className={ theme.palette.type === 'dark' ? classes.listContainerDark : classes.listContainer }>
           <div className={ theme.palette.type === 'dark' ? classes.headerContainerDark : classes.headerContainer }>
             <div className={ classes.filterRow }>
-              <ThemeProvider theme={searchTheme}>
-                <Paper className={ classes.searchPaper }>
-                  <TextField
-                    fullWidth
-                    className={ classes.searchContainer }
-                    variant="outlined"
-                    placeholder="Reward Token Address (eg. 0x6b1754....1d0f)"
-                    value={ search }
-                    onChange={ onSearchChanged }
-                    InputProps={{
-                      endAdornment: <InputAdornment position="end">
-                        <SearchIcon fontSize="small"  />
-                      </InputAdornment>,
-                      startAdornment: <InputAdornment position="start">
-                        <Typography className={ classes.searchInputAdnornment }>
-                          Search Rewards
-                        </Typography>
-                      </InputAdornment>
-                    }}
-                  />
-                </Paper>
+              <ThemeProvider theme={theme.palette.type === 'dark' ? searchThemeDark : searchTheme}>
+                <TextField
+                  fullWidth
+                  className={ classes.searchContainer }
+                  variant="outlined"
+                  placeholder="Reward Token Address (eg. 0x6b1754....1d0f)"
+                  value={ search }
+                  onChange={ onSearchChanged }
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">
+                      <SearchIcon fontSize="medium"  />
+                    </InputAdornment>,
+                    startAdornment: <InputAdornment position="start">
+                      <Typography className={ classes.searchInputAdnornment }>
+                        Search Rewards:
+                      </Typography>
+                    </InputAdornment>
+                  }}
+                />
               </ThemeProvider>
             </div>
             <Header changeTheme={ changeTheme } />

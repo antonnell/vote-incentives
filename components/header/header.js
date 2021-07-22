@@ -125,14 +125,13 @@ function Header(props) {
         <Button
           className={ classes.backButton }
           variant='outlined'
-          color="secondary"
           onClick={props.backClicked}>
           <Typography className={ classes.buttonText }>Back</Typography>
         </Button>
         <div className={ classes.space }>
 
         </div>
-        <Button disableElevation className={classes.accountButton} variant='outlined' color="secondary" onClick={onAddressClicked}>
+        <Button disableElevation className={classes.accountButton2} variant='outlined' onClick={onAddressClicked}>
           {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
           <Typography className={ classes.buttonText }>{account && account.address ? formatAddress(account.address) : 'Connect Wallet'}</Typography>
         </Button>

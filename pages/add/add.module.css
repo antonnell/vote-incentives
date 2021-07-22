@@ -54,7 +54,15 @@
   padding-top: 32px;
   background: #f4f5f8;
   position: sticky;
-  top: 179px;
+  top: 226px;
+  z-index: 8;
+}
+
+.tableHeaderDark {
+  padding-top: 32px;
+  background: #1C253C;
+  position: sticky;
+  top: 226px;
   z-index: 8;
 }
 
@@ -74,6 +82,8 @@
 
 .typeRow {
   width: 200px;
+  display: flex;
+  align-items: center;
 }
 
 .poolRow {
@@ -96,7 +106,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px 0px;
-  border-bottom: 1px solid #eff0f3;
+  border-bottom: 1px solid #B1B6C1;
 }
 
 .chooseButton {
@@ -125,4 +135,8 @@
 
 .buttonText {
   font-size: 12px !important;
+}
+
+.poolHeaderText {
+  padding-left: 64px
 }

@@ -11,9 +11,6 @@ const theme = createTheme({
       default: '#fff',
       paper: '#fff'
     },
-    accountButton: {
-      default: '#EFEFEF'
-    },
     primary: {
       main: '#0053FF',
     },
@@ -26,6 +23,11 @@ const theme = createTheme({
     ...coreTheme.overrides,
     MuiButton: {
       ...coreTheme.overrides.MuiButton,
+      outlined: {
+        color: '#fff',
+        borderColor: '#fff',
+        borderRadius: '32px'
+      },
       outlinedPrimary: {
         border: '1px solid #EAEAEA',
         "&:hover": {

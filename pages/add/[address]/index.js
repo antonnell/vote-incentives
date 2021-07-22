@@ -151,7 +151,10 @@ function Voting({ changeTheme, theme }) {
                   endAdornment: (
                     <Button
                       size='large'
-                      variant='contained'>
+                      variant='contained'
+                      color='primary'
+                      className={ classes.inputButton }
+                      >
                       <Typography>Submit</Typography>
                     </Button>
                   )

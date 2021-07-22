@@ -7,11 +7,14 @@ const theme = createTheme({
   palette: {
     ...coreTheme.palette,
     background: {
-      default: '#22252E',
-      paper: '#2B2E3C'
+      default: '#141C2F',
+      paper: '#1C253C'
     },
     primary: {
       main: '#2F80ED',
+    },
+    secondary: {
+      main: '#141C2F'
     },
     type: 'dark',
   },
@@ -30,13 +33,13 @@ const theme = createTheme({
     MuiInputBase: {
       ...coreTheme.overrides.MuiInputBase,
       root: {
-        background: "#fff"
+        background: "#141C2F"
       }
     },
     MuiOutlinedInput: {
       ...coreTheme.overrides.MuiOutlinedInput,
       notchedOutline: {
-        borderColor: "#FFF"
+        borderColor: "#31394F"
       }
     },
     MuiSnackbarContent: {

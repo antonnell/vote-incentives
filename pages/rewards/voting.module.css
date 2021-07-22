@@ -1,13 +1,13 @@
 .container {
   display: grid;
-  grid-template-columns: 800px calc(100vw - 817px);
+  grid-template-columns: 800px calc(100vw - 800px);
   position: relative;
   box-sizing: border-box;
 }
 
 .containerDark {
   display: grid;
-  grid-template-columns: 800px calc(100vw - 817px);
+  grid-template-columns: 800px calc(100vw - 800px);
   position: relative;
   box-sizing: border-box;
 }
@@ -38,12 +38,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 48px;
-  padding-top: 24px;
   position: sticky;
   top: 0;
-  background: linear-gradient(#f3f3f3 90%, transparent 100%);
-  padding: 24px 80px 48px 80px;
+  background: #fff;
   z-index: 1;
 }
 
@@ -52,12 +49,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 48px;
-  padding-top: 24px;
   position: sticky;
   top: 0;
-  background: linear-gradient(#23252e 90%, transparent 100%);
-  padding: 24px 80px 48px 80px;
+  background: #141C2F;
   z-index: 1;
 }
 
@@ -66,15 +60,13 @@
   width: 100%;
   align-items: flex-start;
   background: #f3f3f3;
-  padding: 0px 24px;
 }
 
 .listContainerDark {
   min-height: 100vh;
   width: 100%;
   align-items: flex-start;
-  background: #23252e;
-  padding: 0px 24px;
+  background: #141C2F;
 }
 
 .cardsContainer {
@@ -147,8 +139,8 @@
 }
 
 .searchInputAdnornment {
-  font-size: 14px !important;
-  font-weight: bold !important;
+  font: normal normal bold 16px/35px Inter !important;
+  letter-spacing: 0px;
 }
 
 .buttonLabel {
@@ -282,8 +274,7 @@
     text-align: center;
     justify-content: center;
   }
-  .version {
-    padding-left: 0;
+  .version {-left: 0;
   }
   .cardsContainer {
     grid-template-columns: 100%;
