@@ -144,15 +144,15 @@ class Store {
   _mapGaugeTypeToName = (gaugeType) => {
     switch (gaugeType) {
       case '0':
-        return 'Ethereum Liquidity'
+        return 'Ethereum'
       case '1':
-        return 'Fantom Liquidity'
+        return 'Fantom'
       case '2':
-        return 'Polygon Liquidity'
+        return 'Polygon'
       case '3':
         return 'Crypto Pools'
       case '4':
-        return 'xDAI Liquidity'
+        return 'xDAI'
       default:
         return 'Unknown'
     }

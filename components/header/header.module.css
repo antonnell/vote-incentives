@@ -4,17 +4,35 @@
   align-items: center;
 }
 
+.headerContainer2 {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.space {
+  flex: 1;
+}
+
+.buttonText {
+  font-size: 12px !important;
+}
+
+.backButton {
+  width: 100px;
+}
+
 .accountButton {
   display: flex;
   align-items: center;
   margin-left: 12px !important;
-  min-height: 40px;
-  width: 250px;
+  width: 180px;
 }
 
 .accountIcon {
-  width: 30px;
-  height: 30px;
+  width: 16px;
+  height: 16px;
   background-size: 100%;
   margin-right: 12px;
 }
@@ -45,10 +63,6 @@
 .switchIcon {
   font-size: 1.5rem !important;
   margin-top: 0.1rem;
-}
-
-.backButton {
-  flex: 1;
 }
 
 @media screen and (max-width: 600px) {

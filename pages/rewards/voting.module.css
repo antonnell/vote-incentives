@@ -1,16 +1,20 @@
 .container {
   display: grid;
-  grid-template-columns: 700px calc(100vw - 717px);
+  grid-template-columns: 800px calc(100vw - 817px);
   position: relative;
   box-sizing: border-box;
 }
 
 .containerDark {
   display: grid;
-  grid-template-columns: 700px calc(100vw - 717px);
+  grid-template-columns: 800px calc(100vw - 817px);
   position: relative;
   box-sizing: border-box;
-  background: #2b2e3c;
+}
+
+.leftContainer {
+  background: transparent url('../../public/Group 4869.png') 0% 0% no-repeat padding-box;
+  opacity: 1;
 }
 
 .copyContainer {
@@ -21,12 +25,12 @@
   top: 10rem;
   height: fit-content;
   justify-content: center;
-  top: 13rem;
+  top: 6rem;
   align-items: center;
 }
 
 .copyCentered {
-  width: 425px;
+  width: 525px;
 }
 
 .headerContainer {
@@ -83,20 +87,26 @@
 
 .titleSpacing {
   margin-bottom: 21px !important;
-}
-
-.helpingUnderline {
-  color: #2f80ed;
+  text-align: left !important;
+  font: normal normal bold 60px/72px Grtsk Giga !important;
+  letter-spacing: 0px;
+  color: #FFFFFF !important;
+  opacity: 1;
 }
 
 .helpingParagraph {
-  margin-bottom: 30px !important;
-  max-width: 340px;
-}
+  text-align: left  !important;
+  font: normal normal 200 33px/40px Inter !important;
+  letter-spacing: -0.66px  !important;
+  color: #FFFFFF  !important;
+  opacity: 1  !important;
+}4
 
 .addNetworkButton {
   margin-top: 50px !important;
   width: fit-content;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border-radius: 10px;
 }
 
 .filterRow {
@@ -114,7 +124,7 @@
 .socials {
   position: fixed;
   bottom: 48px;
-  width: 425px;
+  width: 525px;
 }
 
 .socialButton {
@@ -124,10 +134,12 @@
 
 .sourceCode {
   padding-left: 6px;
+  color: #fff !important;
 }
 
 .version {
   padding-left: 30px;
+  color: #fff !important;
 }
 
 .searchPaper {
@@ -140,8 +152,11 @@
 }
 
 .buttonLabel {
-  text-transform: capitalize !important;
-  font-weight: 500 !important;
+  text-align: center  !important;
+  font: normal normal bold 18px/21px Inter !important;
+  letter-spacing: 0px  !important;
+  color: #000000  !important;
+  text-transform: uppercase  !important;
 }
 
 .buttonText {
@@ -149,6 +164,36 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.divider {
+  margin-top: 40px;
+  margin-bottom: 50px;
+  border-bottom: 1px solid #FFFFFF41;
+  width: 524px;
+}
+
+.getMoreVotesBox {
+  background: #141C2F 0% 0% no-repeat padding-box;
+  background-color: rgba(20, 28, 47, 0.1);
+  border-radius: 10px;
+  padding: 13px 24px;
+  width: fit-content;
+}
+
+.getMoreVotesText {
+  font: normal normal bold 22px/26px Grtsk Giga  !important;
+  letter-spacing: 1.54px  !important;
+  color: #FFFFFF  !important;
+  text-transform: uppercase;
+}
+
+.addRewardText {
+  margin-top: 24px !important;
+  margin-bottom: 40px !important;
+  font: normal normal 300 22px/33px Inter !important;
+  letter-spacing: 0px  !important;
+  color: #FFFFFF  !important;
 }
 
 @media screen and (max-width: 1700px) {

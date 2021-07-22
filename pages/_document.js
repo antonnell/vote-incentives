@@ -10,6 +10,7 @@ export default class MyDocument extends Document {
         <Head>
           <link rel="stylesheet" href="/fonts/Inter/inter.css" />
           <link rel="stylesheet" href="/fonts/Druk/Druk.css" />
+          <link rel="stylesheet" href="/fonts/GrtskGiga/stylesheet.css" />
         </Head>
         <body>
           <Main />
@@ -18,7 +19,7 @@ export default class MyDocument extends Document {
       </Html>
     );
   }
-} 
+}
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with server-side generation (SSG).

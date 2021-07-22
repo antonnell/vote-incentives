@@ -118,6 +118,29 @@ function Header(props) {
     setDarkMode(localStorageDarkMode ? localStorageDarkMode === 'dark' : false);
   }, []);
 
+
+  if(props.variant === 2) {
+    return (
+      <div className={classes.headerContainer2}>
+        <Button
+          className={ classes.backButton }
+          variant='outlined'
+          color="secondary"
+          onClick={props.backClicked}>
+          <Typography className={ classes.buttonText }>Back</Typography>
+        </Button>
+        <div className={ classes.space }>
+
+        </div>
+        <Button disableElevation className={classes.accountButton} variant='outlined' color="secondary" onClick={onAddressClicked}>
+          {account && account.address && <div className={`${classes.accountIcon} ${classes.metamask}`}></div>}
+          <Typography className={ classes.buttonText }>{account && account.address ? formatAddress(account.address) : 'Connect Wallet'}</Typography>
+        </Button>
+        {unlockOpen && <Unlock modalOpen={unlockOpen} closeModal={closeUnlock} />}
+      </div>
+    )
+  }
+
   return (
     <div className={classes.headerContainer}>
       <div className={classes.themeSelectContainer}>

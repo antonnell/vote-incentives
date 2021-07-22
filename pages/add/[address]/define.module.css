@@ -1,0 +1,78 @@
+.container {
+
+}
+
+.headContainer {
+  background: transparent url('../../../public/Group 4869.png') 0% 0% no-repeat padding-box;
+  position: relative;
+  z-index: 9;
+  position: sticky;
+  top: 0px;
+}
+
+.headContainerContent {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.selectPool {
+  font-size: 30px !important;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.choosePool {
+  font-size: 12px !important;
+  color: #fff !important;
+  font-weight: 100;
+  padding-bottom: 110px;
+}
+
+.actionContainer {
+  position: absolute;
+  top: 140px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-width: 700px;
+  padding: 24px;
+}
+
+.selectedField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 61px;
+  border-bottom: 1px solid #eff0f3;
+}
+
+.assetIcon {
+  border-radius: 20px;
+  margin-right: 12px;
+}
+
+.assetDetails {
+  flex: 1;
+}
+
+.selectedPoolText {
+  font-size: 12px !important;
+}
+
+.assetNameText {
+  font-weight: bold !important;
+  line-height: 1.1 !important;
+}
+
+.assetNameSubText {
+  font-size: 12px !important;
+}
+
+.inputContainer {
+  padding-top: 24px;
+}

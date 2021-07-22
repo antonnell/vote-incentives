@@ -1,0 +1,118 @@
+.container {
+
+}
+
+.headContainer {
+  background: transparent url('../../public/Group 4869.png') 0% 0% no-repeat padding-box;
+  position: relative;
+  z-index: 9;
+  position: sticky;
+  top: 0px;
+}
+
+.headContainerContent {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.selectPool {
+  font-size: 30px !important;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.choosePool {
+  font-size: 12px !important;
+  color: #fff !important;
+  font-weight: 100;
+  padding-bottom: 64px;
+}
+
+.searchField {
+  position: absolute;
+  bottom: -32px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-width: 1200px;
+}
+
+.searchInputAdnornment {
+  font-size: 14px !important;
+  font-weight: bold !important;
+}
+
+.tableHeader {
+  padding-top: 32px;
+  background: #f4f5f8;
+  position: sticky;
+  top: 179px;
+  z-index: 8;
+}
+
+.tableHeaderRow {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0px;
+}
+
+.typeRow {
+  width: 200px;
+}
+
+
+.poolRow {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.assetIcon {
+  margin-right: 12px;
+}
+
+.actionRow {
+  width: 200px;
+  text-align: right;
+}
+
+.tableRow {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0px;
+  border-bottom: 1px solid #eff0f3;
+}
+
+.chooseButton {
+
+}
+
+.nameText {
+  font-size: 14px !important;
+  font-weight: bold;
+}
+
+.rowText {
+  font-size: 14px !important;
+  font-weight: bold;
+}
+
+.typeText {
+  font-size: 12px !important;
+  background: #b1b6c1;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 1px 6px;
+  color: #fff;
+}
+
+.buttonText {
+  font-size: 12px !important;
+}

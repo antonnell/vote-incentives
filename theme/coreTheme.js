@@ -121,7 +121,7 @@ const coreTheme = {
     },
     MuiButton: {
       sizeLarge: {
-        borderRadius: '50px',
+        borderRadius: '10px',
         width: '260px',
         height: '60px'
       },
