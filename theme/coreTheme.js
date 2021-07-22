@@ -1,5 +1,5 @@
 export const colors = {
-  blue: "#2F80ED",
+  blue: "#0053FF",
   red: '#ed4337',
   orange: '#ffb347',
   lightBlack: 'rgba(0, 0, 0, 0.87)'
@@ -111,7 +111,8 @@ const coreTheme = {
     },
     MuiOutlinedInput: {
       input: {
-        padding: '12.5px 14px'
+        padding: '26px 24px',
+        fontSize: '18px'
       }
     },
     MuiTooltip: {
@@ -121,13 +122,13 @@ const coreTheme = {
     },
     MuiButton: {
       sizeLarge: {
-        borderRadius: '10px',
-        width: '260px',
+        borderRadius: '5px',
+        minWidth: '140px',
         height: '60px'
       },
       root: {
+        borderRadius: '5px',
         minWidth: '50px',
-        borderRadius: '32px'
       },
       outlinedSizeSmall: {
         fontSize: '0.7rem',

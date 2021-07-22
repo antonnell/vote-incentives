@@ -15,7 +15,7 @@ const theme = createTheme({
       default: '#EFEFEF'
     },
     primary: {
-      main: '#2F80ED',
+      main: '#0053FF',
     },
     secondary: {
       main: '#FFFFFF'
@@ -29,7 +29,7 @@ const theme = createTheme({
       outlinedPrimary: {
         border: '1px solid #EAEAEA',
         "&:hover": {
-          backgroundColor: '#2F80ED !important',
+          backgroundColor: '#0053FF !important',
           color: '#fff'
         }
       }
@@ -43,7 +43,7 @@ const theme = createTheme({
     MuiOutlinedInput: {
       ...coreTheme.overrides.MuiOutlinedInput,
       notchedOutline: {
-        borderColor: "#FFF"
+        borderWidth: "2px"
       }
     },
     MuiSnackbarContent: {

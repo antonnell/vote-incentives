@@ -76,6 +76,9 @@ function Voting({ changeTheme, theme }) {
   const [ search, setSearch ] = useState('')
   const [ gauges, setGauges ] = useState([])
 
+  const [ rewardToken, setRewardToken ] = useState('')
+
+
   const onConnectWallet = () => {
     stores.emitter.emit(CONNECT_WALLET);
   };
@@ -113,6 +116,10 @@ function Voting({ changeTheme, theme }) {
     router.push(`/`);
   }
 
+  const onRewardTokenChanged = (e) => {
+    setRewardToken(e.target.value)
+  }
+
   return (
     <Layout changeTheme={changeTheme}>
       <div className={ classes.container }>
@@ -124,24 +131,63 @@ function Voting({ changeTheme, theme }) {
           </div>
           <Paper className={ classes.actionContainer }>
             <div className={ classes.selectedField }>
-              <img src='/unknown-logo.png' width='40px' height='40px' className={ classes.assetIcon } />
+              <img src='/unknown-logo.png' width='55px' height='55px' className={ classes.assetIcon } />
               <div className={ classes.assetDetails }>
                 <Typography className={ classes.assetNameText }>Name</Typography>
-                <Typography color='secondary' className={ classes.assetNameSubText }>Assets</Typography>
+                <Typography color='textSecondary' className={ classes.assetNameSubText }>0x123abc...123</Typography>
               </div>
-              <Typography className={ classes.selectedPoolText } color='secondary'>Selected Pool</Typography>
+              <Typography className={ classes.selectedPoolText } color='textSecondary'>Selected Pool</Typography>
             </div>
             <div className={ classes.inputContainer }>
-              <Typography>Add Reward Token Address</Typography>
+              <Typography className={ classes.inputFieldTitle }>Add Reward Token Address:</Typography>
+              <TextField
+                className={ classes.outlinedInput }
+                variant="outlined"
+                fullWidth
+                placeholder="0x00000000000000"
+                value={ rewardToken }
+                onChange={ onRewardTokenChanged }
+                InputProps={{
+                  endAdornment: (
+                    <Button
+                      size='large'
+                      variant='contained'>
+                      <Typography>Submit</Typography>
+                    </Button>
+                  )
+                }}
+              />
             </div>
             <div className={ classes.inputContainer }>
-              <Typography>Total Reward Tokens On Offer</Typography>
+              <Typography className={ classes.inputFieldTitle }>Total Reward Tokens On Offer:</Typography>
+              <TextField
+                className={ classes.outlinedInput }
+                variant="outlined"
+                fullWidth
+                placeholder="0.00"
+                value={ rewardToken }
+                onChange={ onRewardTokenChanged }
+                InputProps={{
+                  endAdornment: (
+                    <div>
+                      <Typography color='textSecondary' className={ classes.availableText }>Available</Typography>
+                      <Typography color='textSecondary' className={ classes.availableText }>0.00</Typography>
+                    </div>
+                  )
+                }}
+              />
             </div>
-            <Typography>Rewards are valid for 7 days from time created</Typography>
-            <Button
-              variant='contained'>
-              <Typography>Submit</Typography>
-            </Button>
+            <Typography className={ classes.rewardText }>Rewards are valid for 7 days from time created</Typography>
+            <div className={ classes.bigButton }>
+              <Button
+                size='large'
+                variant='contained'
+                color='primary'
+                fullWidth
+                >
+                <Typography>Submit</Typography>
+              </Button>
+            </div>
           </Paper>
         </div>
       </div>

@@ -21,21 +21,24 @@
 }
 
 .selectPool {
-  font-size: 30px !important;
-  color: #fff !important;
-  font-weight: bold;
+  font: normal normal bold 32px/38px Grtsk Giga !important;
+  letter-spacing: 2.88px !important;
+  color: #FFFFFF !important;
+  padding-bottom: 12px;
+  padding-top: 12px;
 }
 
 .choosePool {
-  font-size: 12px !important;
-  color: #fff !important;
-  font-weight: 100;
-  padding-bottom: 64px;
+  text-align: center !important;
+  font: normal normal 300 17px/20px Inter !important;
+  letter-spacing: -0.34px !important;
+  color: #FFFFFF !important;
+  padding-bottom: 100px;
 }
 
 .searchField {
   position: absolute;
-  bottom: -32px;
+  bottom: -40px;
   left: 0;
   right: 0;
   margin: auto;
@@ -43,8 +46,8 @@
 }
 
 .searchInputAdnornment {
-  font-size: 14px !important;
-  font-weight: bold !important;
+  font: normal normal bold 16px/35px Inter !important;
+  letter-spacing: 0px;
 }
 
 .tableHeader {
@@ -62,10 +65,16 @@
   padding: 20px 0px;
 }
 
+.tableHeaderText {
+  font: normal normal bold 14px/35px Inter !important;
+  letter-spacing: 0px !important;
+  color: #707786 !important;
+  opacity: 0.6;
+}
+
 .typeRow {
   width: 200px;
 }
-
 
 .poolRow {
   flex: 1;
@@ -74,7 +83,7 @@
 }
 
 .assetIcon {
-  margin-right: 12px;
+  margin-right: 24px;
 }
 
 .actionRow {
@@ -95,21 +104,22 @@
 }
 
 .nameText {
-  font-size: 14px !important;
-  font-weight: bold;
+  text-align: left;
+  font: normal normal bold 20px/35px Inter !important;
+  letter-spacing: 0px;
 }
 
 .rowText {
-  font-size: 14px !important;
-  font-weight: bold;
+  font: normal normal bold 16px/35px Inter !important;
+  letter-spacing: 0px;
 }
 
 .typeText {
-  font-size: 12px !important;
+  font: normal normal bold 12px/23px Inter !important;
   background: #b1b6c1;
   border-radius: 20px;
   width: fit-content;
-  padding: 1px 6px;
+  padding: 0px 12px;
   color: #fff;
 }
 

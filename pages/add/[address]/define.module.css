@@ -21,21 +21,24 @@
 }
 
 .selectPool {
-  font-size: 30px !important;
-  color: #fff !important;
-  font-weight: bold;
+  font: normal normal bold 32px/38px Grtsk Giga !important;
+  letter-spacing: 2.88px !important;
+  color: #FFFFFF !important;
+  padding-bottom: 12px;
+  padding-top: 12px;
 }
 
 .choosePool {
-  font-size: 12px !important;
-  color: #fff !important;
-  font-weight: 100;
-  padding-bottom: 110px;
+  text-align: center !important;
+  font: normal normal 300 17px/20px Inter !important;
+  letter-spacing: -0.34px !important;
+  color: #FFFFFF !important;
+  padding-bottom: 160px;
 }
 
 .actionContainer {
   position: absolute;
-  top: 140px;
+  top: 190px;
   left: 0;
   right: 0;
   margin: auto;
@@ -47,13 +50,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 61px;
+  height: 80px;
   border-bottom: 1px solid #eff0f3;
+  padding-bottom: 17px;
 }
 
 .assetIcon {
-  border-radius: 20px;
-  margin-right: 12px;
+  border-radius: 30px;
+  margin-right: 24px;
 }
 
 .assetDetails {
@@ -61,18 +65,44 @@
 }
 
 .selectedPoolText {
-  font-size: 12px !important;
+  font: normal normal medium 15px/35px Inter !important;
 }
 
 .assetNameText {
-  font-weight: bold !important;
-  line-height: 1.1 !important;
+  font: normal normal bold 20px/35px Inter !important;
 }
 
 .assetNameSubText {
-  font-size: 12px !important;
+  font: normal normal medium 15px/35px Inter !important;
 }
 
 .inputContainer {
-  padding-top: 24px;
+  padding-top: 48px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.inputFieldTitle {
+  font: normal normal bold 20px/35px Inter !important;
+  margin-bottom: 40px !important
+}
+
+.outlinedInput {
+}
+
+.availableText {
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+}
+
+.rewardText {
+  margin: 0 auto !important;
+  margin-top: 24px !important;
+  margin-bottom: 40px !important;
+  max-width: 600px !important;
+}
+
+.bigButton {
+  max-width: 600px !important;
+  margin: 0 auto;
 }

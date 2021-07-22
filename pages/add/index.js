@@ -60,10 +60,16 @@ const searchTheme = createTheme({
     },
     MuiOutlinedInput: {
       input: {
-        padding: '24px 20px'
+        padding: '34px 50px'
       },
       notchedOutline: {
         borderColor: "#FFF",
+      },
+      adornedEnd: {
+        paddingRight: '40px'
+      },
+      adornedStart: {
+        paddingLeft: '40px'
       }
     },
   },
@@ -135,7 +141,7 @@ function Voting({ changeTheme, theme }) {
                   onChange={ onSearchChanged }
                   InputProps={{
                     endAdornment: <InputAdornment position="end">
-                      <SearchIcon fontSize="small"  />
+                      <SearchIcon fontSize="medium"  />
                     </InputAdornment>,
                     startAdornment: <InputAdornment position="start">
                       <Typography className={ classes.searchInputAdnornment }>
@@ -151,9 +157,15 @@ function Voting({ changeTheme, theme }) {
         <div className={ classes.tableContainer }>
           <div className={ classes.tableHeader }>
             <div className={ classes.tableHeaderRow }>
-              <Typography className={ classes.poolRow }>Pool</Typography>
-              <Typography className={ classes.typeRow }>Chain</Typography>
-              <Typography className={ classes.actionRow }>Action</Typography>
+              <div className={ classes.poolRow }>
+                <Typography className={ classes.tableHeaderText }>Pool</Typography>
+              </div>
+              <div className={ classes.typeRow }>
+                <Typography className={ classes.tableHeaderText }>Chain</Typography>
+              </div>
+              <div className={ classes.actionRow }>
+                <Typography className={ classes.tableHeaderText }>Action</Typography>
+              </div>
             </div>
           </div>
           <div className={ classes.tableBody }>
@@ -162,7 +174,7 @@ function Voting({ changeTheme, theme }) {
                 return (
                   <div className={ classes.tableRow }>
                     <div className={ classes.poolRow }>
-                      <img src='/unknown-logo.png' alt='' width='30px' height='30px' className={ classes.assetIcon } />
+                      <img src='/unknown-logo.png' alt='' width='40px' height='40px' className={ classes.assetIcon } />
                       <Typography className={ classes.nameText }>{gauge.name}</Typography>
                     </div>
                     <div className={ classes.typeRow }>
