@@ -166,6 +166,7 @@ function Voting({ changeTheme, theme }) {
 
     setAccount(stores.accountStore.getStore('account'))
     stores.emitter.on(ACCOUNT_CHANGED, accountChanged);
+    stores.emitter.on(INCENTIVES_BALANCES_RETURNED, balanceReturned)
 
     setRewards(stores.incentivesStore.getStore('rewards'))
 
@@ -248,17 +249,7 @@ function Voting({ changeTheme, theme }) {
           </div>
           <div className={ classes.cardsContainer }>
             {
-              rewards.filter((reward) => {
-                if(search === '') {
-                  return true
-                } else {
-                  //filter
-                  return (reward.chain.toLowerCase().includes(search.toLowerCase()) ||
-                  reward.chainId.toString().toLowerCase().includes(search.toLowerCase()) ||
-                  reward.name.toLowerCase().includes(search.toLowerCase()) ||
-                  (reward.nativeCurrency ? reward.nativeCurrency.symbol : '').toLowerCase().includes(search.toLowerCase()))
-                }
-              }).map((reward, idx) => {
+              rewards.map((reward, idx) => {
                 return <RewardCard reward={ reward } key={ idx } />
               })
             }

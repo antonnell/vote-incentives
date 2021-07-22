@@ -70,11 +70,14 @@
 }
 
 .cardsContainer {
+  margin: 0 auto;
   padding: 0px 80px;
   display: grid;
   grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(33% - 15px);
   gap: 30px;
-  max-width: 1400px;
+  max-width: 900px;
+  margin-top: 80px;
+
 }
 
 .titleSpacing {

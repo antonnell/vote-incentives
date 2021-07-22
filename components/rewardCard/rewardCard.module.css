@@ -1,22 +1,27 @@
 .chainContainer {
   width: 100%;
-  border-radius: 10px;
-  background: #0074de !important;
+  border-radius: 30px !important;
   display: flex;
   flex-direction: column;
+  border-bottom: 3px solid #0048FF;
 }
 
 .tryButton {
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-top: 24px !important;
 }
 
 .descriptionText {
-  padding-top: 24px;
-  padding-bottom: 24px;
-  width: 100%;
-  color: #fff !important;
+  padding-top: 30px;
+  font: normal normal bold 28px/34px Inter !important;
+}
+
+.descriptionSubText {
+  padding-top: 12px;
+  font: normal normal 300 13px/16px Inter !important;
+  opacity: 0.54;
 }
 
 .topInfo {
@@ -50,10 +55,10 @@
 }
 
 .avatar {
-  background-color: #007ff5;
+  background-color: #0053FF;
   border-radius: 90px;
-  font-size: 120px !important;
-  padding: 30px;
+  font-size: 63px !important;
+  padding: 10px;
   color: #fff;
   box-shadow: 0px 7px 7px #0000000A;
   -webkit-box-shadow: 0px 7px 7px #0000000A;

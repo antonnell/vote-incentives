@@ -181,10 +181,12 @@ class Store {
     let rewards = []
 
     for(let i = 0; i < gauges.length; i++) {
-      if(bribery[i].canClaim && BigNumber(bribery[i].claimable).gt(0)) {
+      console.log(bribery[i])
+      if(bribery[i].canClaim) {
         rewards.push({
           amount: bribery[i].claimable,
           canClaim: bribery[i].canClaim,
+          hasCLaimed: bribery[i].hasCLaimed,
           gauge: gauges[i],
           rewardToken: rewardToken
         })
@@ -201,7 +203,7 @@ class Store {
       const token = new web3.eth.Contract(ERC20_ABI, tokenAddress)
 
       const symbol = await token.methods.symbol().call()
-      const decimals = await token.methods.decimals().call()
+      const decimals = parseInt(await token.methods.decimals().call())
 
       return {
         address: tokenAddress,
@@ -229,7 +231,8 @@ class Store {
           claimable: "0",
           lastUserClaim: "0",
           activePeriod: "0",
-          canClaim: false
+          canClaim: false,
+          hasClaimed: false
         }
       }
 
@@ -240,7 +243,8 @@ class Store {
         claimable,
         lastUserClaim,
         activePeriod,
-        canClaim: ( BigNumber(lastUserClaim).lt(activePeriod) && BigNumber(block).lt(BigNumber(activePeriod).plus(WEEK)) )
+        canClaim: BigNumber(block).lt(BigNumber(activePeriod).plus(WEEK)),
+        hasClaimed: BigNumber(lastUserClaim).lt(activePeriod)
       }
     })
 

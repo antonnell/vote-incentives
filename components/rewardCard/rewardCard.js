@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Paper, Grid, Button, FormControlLabel, Checkbox } from '@material-ui/core'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import RedeemIcon from '@material-ui/icons/Redeem';
 import BigNumber from 'bignumber.js';
 
@@ -70,17 +69,16 @@ export default function RewardCard({ reward }) {
       <ThemeProvider theme={theme}>
         <div className={ classes.topInfo }>
           <RedeemIcon className={ classes.avatar } />
-          <Typography variant='h3' className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(reward.claimable).div(reward.rewardToken.decimals)) } { reward.rewardToken.symbol }</Typography>
-          <Typography variant='subtitle1' className={ classes.descriptionText} align='center' >Your reward for voting for reward.name on Curve.fi</Typography>
+          <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(reward.claimable).div(reward.rewardToken.decimals).toFixed(reward.rewardToken.decimals)) } { reward.rewardToken.symbol }</Typography>
+          <Typography className={ classes.descriptionSubText } align='center'>Your reward for voting for reward.name on Curve.fi</Typography>
           <Button
             className={ classes.tryButton }
-            variant='contained'
+            variant='outlined'
             disableElevation
             onClick={ onClaim }
-            color='secondary'
-            endIcon={<ArrowForwardIcon />}
+            color='primary'
           >
-            <Typography className={ classes.buttonLabel }>Claim</Typography>
+            <Typography className={ classes.buttonLabel }>Claim Reward</Typography>
           </Button>
         </div>
       </ThemeProvider>

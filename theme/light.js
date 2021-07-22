@@ -17,6 +17,10 @@ const theme = createTheme({
     secondary: {
       main: '#FFFFFF'
     },
+    text: {
+      primary: 'rgba(0, 0, 0, 0.87)',
+      secondary: 'rgba(0, 0, 0, 0.30)',
+    },
     type: 'light',
   },
   overrides: {
