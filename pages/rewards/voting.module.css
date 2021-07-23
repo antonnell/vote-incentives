@@ -191,6 +191,21 @@
   color: #FFFFFF  !important;
 }
 
+.notConnectedContainer {
+  width: 100%;
+  min-height: 700px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.connectText {
+  font: normal normal 300 22px/33px Inter !important;
+  margin-bottom: 24px !important;
+}
+
 @media screen and (max-width: 1700px) {
   .cardsContainer {
     grid-template-columns: calc(50% - 15px) calc(50% - 15px);

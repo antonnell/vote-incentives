@@ -268,6 +268,19 @@ function Voting({ changeTheme, theme }) {
             </div>
             <Header changeTheme={ changeTheme } />
           </div>
+          {
+            !account &&
+            <div className={ classes.notConnectedContainer }>
+              <Typography className={ classes.connectText }>Connect your wallet to see if you are eligible for rewards</Typography>
+              <Button
+                size='large'
+                variant='contained'
+                onClick={ onConnectWallet }
+                color='primary'>
+                <Typography>Connect Wallet</Typography>
+              </Button>
+            </div>
+          }
           <div className={ classes.cardsContainer }>
             {
               rewards.map((reward, idx) => {

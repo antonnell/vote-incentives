@@ -205,7 +205,8 @@ class Store {
     let rewards = []
 
     for(let i = 0; i < gauges.length; i++) {
-      if(bribery[i].canClaim) {
+
+      if((bribery[i].canClaim && BigNumber(bribery[i].claimable).gt(0)) || (bribery[i].canClaim && bribery[i].hasClaimed)) {
         rewards.push({
           amount: bribery[i].claimable,
           canClaim: bribery[i].canClaim,
@@ -268,11 +269,6 @@ class Store {
 
       const claimable = await bribery.methods.claimable(account.address, gauge.gaugeAddress, rewardTokenAddress).call()
       const lastUserClaim = await bribery.methods.last_user_claim(account.address, gauge.gaugeAddress, rewardTokenAddress).call()
-
-      console.log(claimable)
-      console.log(lastUserClaim)
-      console.log(activePeriod)
-
 
       return {
         claimable,
