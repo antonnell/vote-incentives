@@ -290,7 +290,8 @@ function MyComponent(props) {
                   fontFamily: 'Inter',
                   fontWeight: 'bold',
                   fontSize: '18px',
-                  lineHeight: '3',
+                  marginTop: '10px',
+                  marginBottom: '10px',
                 }}>{display}</Typography>
                 <Typography style={{
                   font: 'normal normal 300 13px/16px Inter !important',

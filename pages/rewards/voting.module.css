@@ -219,6 +219,7 @@
 .connectWalletText {
   font: normal normal bold 28px/34px Inter !important;
   letter-spacing: -0.56px;
+  margin-bottom: 30px !important;
 }
 
 @media screen and (max-width: 1700px) {
