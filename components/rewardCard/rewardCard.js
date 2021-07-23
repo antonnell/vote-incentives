@@ -93,15 +93,30 @@ export default function RewardCard({ reward }) {
           <RedeemIcon className={ classes.avatar } />
           <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(reward.claimable).div(reward.rewardToken.decimals).toFixed(reward.rewardToken.decimals)) } { reward.rewardToken.symbol }</Typography>
           <Typography className={ classes.descriptionSubText } align='center'>Your reward for voting for {reward.gauge.name} on Curve.fi</Typography>
-          <Button
-            className={ classes.tryButton }
-            variant='outlined'
-            disableElevation
-            onClick={ onClaim }
-            color='primary'
-          >
-            <Typography className={ classes.buttonLabel }>{ claiming ? 'Claiming ...' : 'Claim Reward'}</Typography>
-          </Button>
+          {
+            reward.hasClaimed &&
+            <Button
+              className={ classes.tryButton }
+              variant='outlined'
+              disableElevation
+              color='primary'
+            >
+              <Typography className={ classes.buttonLabel }>Reward Claimed</Typography>
+            </Button>
+          }
+          {
+            !reward.hasClaimed &&
+            <Button
+              className={ classes.tryButton }
+              variant='outlined'
+              disableElevation
+              onClick={ onClaim }
+              color='primary'
+              disabled={ claiming }
+            >
+              <Typography className={ classes.buttonLabel }>{ claiming ? 'Claiming ...' : 'Claim Reward'}</Typography>
+            </Button>
+          }
         </div>
       </ThemeProvider>
     </Paper>

@@ -209,7 +209,7 @@ class Store {
         rewards.push({
           amount: bribery[i].claimable,
           canClaim: bribery[i].canClaim,
-          hasCLaimed: bribery[i].hasCLaimed,
+          hasClaimed: bribery[i].hasClaimed,
           gauge: gauges[i],
           rewardToken: rewardToken
         })
@@ -269,12 +269,17 @@ class Store {
       const claimable = await bribery.methods.claimable(account.address, gauge.gaugeAddress, rewardTokenAddress).call()
       const lastUserClaim = await bribery.methods.last_user_claim(account.address, gauge.gaugeAddress, rewardTokenAddress).call()
 
+      console.log(claimable)
+      console.log(lastUserClaim)
+      console.log(activePeriod)
+
+
       return {
         claimable,
         lastUserClaim,
         activePeriod,
         canClaim: BigNumber(block).lt(BigNumber(activePeriod).plus(WEEK)),
-        hasClaimed: BigNumber(lastUserClaim).lt(activePeriod)
+        hasClaimed: BigNumber(lastUserClaim).eq(activePeriod)
       }
     })
 
