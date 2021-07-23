@@ -19,6 +19,8 @@ import {
   ADD_REWARD,
   ADD_REWARD_RETURNED
 } from './constants';
+import { NextRouter } from 'next/router'
+
 
 import { ERC20_ABI, BRIBERY_ABI, GAUGE_CONTROLLER_ABI, GAUGE_CONTRACT_ABI } from './abis';
 
@@ -43,7 +45,6 @@ class Store {
 
     dispatcher.register(
       function (payload) {
-        console.log(payload.type)
         switch (payload.type) {
           case CONFIGURE_INCENTIVES:
             this.configure(payload);
@@ -185,7 +186,19 @@ class Store {
       return null
     }
 
-    const rewardTokenAddress = '0x6b175474e89094c44da98b954eedeac495271d0f'
+    let myParam = ''
+
+    if(payload.content && payload.content.address) {
+      myParam = payload.content.address
+    } else {
+      const urlParams = new URLSearchParams(window.location.search);
+      myParam = urlParams.get('reward');
+      if(myParam && !web3.utils.isAddress(myParam)) {
+        return null
+      }
+    }
+
+    const rewardTokenAddress = myParam
     const bribery = await this._getBribery(web3, account, gauges, rewardTokenAddress)
     const rewardToken = await this._getTokenInfo(web3, rewardTokenAddress)
 

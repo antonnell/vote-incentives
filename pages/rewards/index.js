@@ -19,7 +19,7 @@ import AddIcon from '@material-ui/icons/Add';
 import classes from './voting.module.css';
 
 import stores from '../../stores/index.js';
-import { ERROR, ACCOUNT_CHANGED, CONNECT_WALLET, INCENTIVES_BALANCES_RETURNED } from '../../stores/constants';
+import { ERROR, ACCOUNT_CHANGED, CONNECT_WALLET, GET_INCENTIVES_BALANCES, INCENTIVES_BALANCES_RETURNED } from '../../stores/constants';
 
 import { formatCurrency, formatAddress } from '../../utils';
 
@@ -146,18 +146,21 @@ function Voting({ changeTheme, theme }) {
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
+  const [ web3, setWeb3 ] = useState(null)
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState(null);
   const [ search, setSearch ] = useState('')
+  const [ searchError, setSearchError ] = useState(false)
   const [ rewards, setRewards ] = useState([])
 
   const onConnectWallet = () => {
     stores.emitter.emit(CONNECT_WALLET);
   };
 
-  useEffect(function () {
-    const accountChanged = () => {
+  useEffect(async function () {
+    const accountChanged = async () => {
       setAccount(stores.accountStore.getStore('account'))
+      setWeb3(await stores.accountStore.getWeb3Provider())
     }
 
     const balanceReturned = () => {
@@ -165,6 +168,8 @@ function Voting({ changeTheme, theme }) {
     }
 
     setAccount(stores.accountStore.getStore('account'))
+    setWeb3(await stores.accountStore.getWeb3Provider())
+
     stores.emitter.on(ACCOUNT_CHANGED, accountChanged);
     stores.emitter.on(INCENTIVES_BALANCES_RETURNED, balanceReturned)
 
@@ -178,6 +183,20 @@ function Voting({ changeTheme, theme }) {
 
   const onSearchChanged = (event) => {
     setSearch(event.target.value)
+  }
+
+  const onSearch = (event) => {
+    setSearchError(false)
+
+    if (event.keyCode === 13) {
+      if(web3.utils.isAddress(search)) {
+        setRewards([])
+        stores.dispatcher.dispatch({ type: GET_INCENTIVES_BALANCES, content: { address: search } })
+      } else {
+        setSearchError(true)
+      }
+    }
+
   }
 
   const onAddReward = () => {
@@ -226,12 +245,14 @@ function Voting({ changeTheme, theme }) {
             <div className={ classes.filterRow }>
               <ThemeProvider theme={theme.palette.type === 'dark' ? searchThemeDark : searchTheme}>
                 <TextField
+                  error={ searchError }
                   fullWidth
                   className={ classes.searchContainer }
                   variant="outlined"
                   placeholder="Reward Token Address (eg. 0x6b1754....1d0f)"
                   value={ search }
                   onChange={ onSearchChanged }
+                  onKeyDown={ onSearch }
                   InputProps={{
                     endAdornment: <InputAdornment position="end">
                       <SearchIcon fontSize="medium"  />
