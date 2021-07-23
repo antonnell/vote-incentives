@@ -24,7 +24,7 @@
   position: sticky;
   height: fit-content;
   justify-content: center;
-  top: 8rem;
+  top: 10rem;
   align-items: center;
 }
 
@@ -78,7 +78,6 @@
   gap: 30px;
   max-width: 900px;
   margin-top: 80px;
-
 }
 
 .titleSpacing {

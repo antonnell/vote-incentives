@@ -210,10 +210,9 @@ function Voting({ changeTheme, theme }) {
           <div className={ classes.copyContainer }>
             <div className={ classes.copyCentered }>
               <Typography variant='h1' className={ classes.titleSpacing }><span className={ classes.helpingUnderline }>Gauge Vote Incentives</span></Typography>
-              <Typography variant='h2' className={ classes.helpingParagraph }>Providing incentives for users to vote for your gauge.</Typography>
+              <Typography variant='h2' className={ classes.helpingParagraph }>Get more for your votes! <ThumbUpIcon className={ classes.thumbIcon } /></Typography>
               <div className={ classes.divider }>
               </div>
-              <Typography className={ classes.getMoreVotesText }>Get More Votes! <ThumbUpIcon className={ classes.thumbIcon } /></Typography>
               <Typography className={ classes.addRewardText }>Add a reward to a pool which will be distributed proportionally to everyone who votes for it.</Typography>
               {
                 account &&
