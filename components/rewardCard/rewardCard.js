@@ -92,7 +92,7 @@ export default function RewardCard({ reward }) {
         <div className={ classes.topInfo }>
           <RedeemIcon className={ classes.avatar } />
           <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(reward.claimable).div(reward.rewardToken.decimals).toFixed(reward.rewardToken.decimals)) } { reward.rewardToken.symbol }</Typography>
-          <Typography className={ classes.descriptionSubText } align='center'>Your reward for voting for reward.name on Curve.fi</Typography>
+          <Typography className={ classes.descriptionSubText } align='center'>Your reward for voting for {reward.gauge.name} on Curve.fi</Typography>
           <Button
             className={ classes.tryButton }
             variant='outlined'
