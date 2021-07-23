@@ -9,8 +9,9 @@ import Layout from '../../components/layout/layout.js';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
 import RewardCard from '../../components/rewardCard';
+import Unlock from '../../components/unlock/unlock.js';
 
-
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import SearchIcon from '@material-ui/icons/Search';
 import AppsIcon from '@material-ui/icons/Apps';
 import ListIcon from '@material-ui/icons/List';
@@ -22,7 +23,6 @@ import stores from '../../stores/index.js';
 import { ERROR, ACCOUNT_CHANGED, CONNECT_WALLET, GET_INCENTIVES_BALANCES, INCENTIVES_BALANCES_RETURNED } from '../../stores/constants';
 
 import { formatCurrency, formatAddress } from '../../utils';
-
 
 const searchTheme = createTheme({
   palette: {
@@ -209,13 +209,11 @@ function Voting({ changeTheme, theme }) {
         <div className={ classes.leftContainer }>
           <div className={ classes.copyContainer }>
             <div className={ classes.copyCentered }>
-              <Typography variant='h1' className={ classes.titleSpacing }><span className={ classes.helpingUnderline }>Gauge Vote Incetives</span></Typography>
-              <Typography variant='h2' className={ classes.helpingParagraph }>Providing incentives for users to vote for your gauge</Typography>
+              <Typography variant='h1' className={ classes.titleSpacing }><span className={ classes.helpingUnderline }>Gauge Vote Incentives</span></Typography>
+              <Typography variant='h2' className={ classes.helpingParagraph }>Providing incentives for users to vote for your gauge.</Typography>
               <div className={ classes.divider }>
               </div>
-              <div className={ classes.getMoreVotesBox }>
-                <Typography className={ classes.getMoreVotesText }>GET MORE VOTES!</Typography>
-              </div>
+              <Typography className={ classes.getMoreVotesText }>Get More Votes! <ThumbUpIcon className={ classes.thumbIcon } /></Typography>
               <Typography className={ classes.addRewardText }>Add a reward to a pool which will be distributed proportionally to everyone who votes for it.</Typography>
               {
                 account &&
@@ -241,53 +239,52 @@ function Voting({ changeTheme, theme }) {
           </div>
         </div>
         <div className={ theme.palette.type === 'dark' ? classes.listContainerDark : classes.listContainer }>
-          <div className={ theme.palette.type === 'dark' ? classes.headerContainerDark : classes.headerContainer }>
-            <div className={ classes.filterRow }>
-              <ThemeProvider theme={theme.palette.type === 'dark' ? searchThemeDark : searchTheme}>
-                <TextField
-                  error={ searchError }
-                  fullWidth
-                  className={ classes.searchContainer }
-                  variant="outlined"
-                  placeholder="Reward Token Address (eg. 0x6b1754....1d0f)"
-                  value={ search }
-                  onChange={ onSearchChanged }
-                  onKeyDown={ onSearch }
-                  InputProps={{
-                    endAdornment: <InputAdornment position="end">
-                      <SearchIcon fontSize="medium"  />
-                    </InputAdornment>,
-                    startAdornment: <InputAdornment position="start">
-                      <Typography className={ classes.searchInputAdnornment }>
-                        Search Rewards:
-                      </Typography>
-                    </InputAdornment>
-                  }}
-                />
-              </ThemeProvider>
-            </div>
-            <Header changeTheme={ changeTheme } />
-          </div>
           {
             !account &&
-            <div className={ classes.notConnectedContainer }>
-              <Typography className={ classes.connectText }>Connect your wallet to see if you are eligible for rewards</Typography>
-              <Button
-                size='large'
-                variant='contained'
-                onClick={ onConnectWallet }
-                color='primary'>
-                <Typography>Connect Wallet</Typography>
-              </Button>
+            <div className={ classes.connectContainer}>
+              <Typography className={ classes.connectWalletText }>Connect your wallet to continue</Typography>
+              <Unlock />
             </div>
           }
-          <div className={ classes.cardsContainer }>
-            {
-              rewards.map((reward, idx) => {
-                return <RewardCard reward={ reward } key={ idx } />
-              })
-            }
-          </div>
+          {
+            account &&
+            <>
+              <div className={ theme.palette.type === 'dark' ? classes.headerContainerDark : classes.headerContainer }>
+                <div className={ classes.filterRow }>
+                  <ThemeProvider theme={theme.palette.type === 'dark' ? searchThemeDark : searchTheme}>
+                    <TextField
+                      error={ searchError }
+                      fullWidth
+                      className={ classes.searchContainer }
+                      variant="outlined"
+                      placeholder="Reward Token Address (eg. 0x6b1754....1d0f)"
+                      value={ search }
+                      onChange={ onSearchChanged }
+                      onKeyDown={ onSearch }
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">
+                          <SearchIcon fontSize="medium"  />
+                        </InputAdornment>,
+                        startAdornment: <InputAdornment position="start">
+                          <Typography className={ classes.searchInputAdnornment }>
+                            Search Rewards:
+                          </Typography>
+                        </InputAdornment>
+                      }}
+                    />
+                  </ThemeProvider>
+                </div>
+                <Header changeTheme={ changeTheme } />
+              </div>
+              <div className={ classes.cardsContainer }>
+                {
+                  rewards.map((reward, idx) => {
+                    return <RewardCard reward={ reward } key={ idx } />
+                  })
+                }
+              </div>
+            </>
+          }
         </div>
       </div>
     </Layout>

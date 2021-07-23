@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, Button, CircularProgress } from '@material-ui/core';
+import { Typography, Button, CircularProgress, Paper } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { Web3ReactProvider, useWeb3React } from '@web3-react/core';
@@ -12,7 +12,6 @@ import stores from '../../stores';
 
 const styles = (theme) => ({
   root: {
-    flex: 1,
     height: 'auto',
     display: 'flex',
     position: 'relative',
@@ -113,9 +112,11 @@ class Unlock extends Component {
 
     return (
       <div className={classes.root}>
-        <div className={classes.closeIcon} onClick={closeModal}>
-          <CloseIcon />
-        </div>
+        {closeModal && (
+          <div className={classes.closeIcon} onClick={closeModal}>
+            <CloseIcon />
+          </div>
+        )}
         <div className={classes.contentContainer}>
           <Web3ReactProvider getLibrary={getLibrary}>
             <MyComponent closeModal={closeModal} />
@@ -178,14 +179,14 @@ function MyComponent(props) {
     }
   }, [account, active, closeModal, context, library]);
 
-  const width = window.innerWidth;
+  // const width = window?.innerWidth;
 
   return (
     <div
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: width > 576 ? 'space-between' : 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
       }}
     >
@@ -242,13 +243,19 @@ function MyComponent(props) {
             style={{
               padding: '0px',
               display: 'flex',
-              margin: width > 576 ? '12px 0px' : '0px',
+              margin: '12px 0px',
             }}
           >
-            <Button
+            <Paper
               style={{
-                width: width > 576 ? '350px' : 'calc(100vw - 100px)',
-                height: '160px',
+                width: '220px',
+                height: '220px',
+                borderBottom: '3px solid #0048FF',
+                borderRadius: '30px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
               }}
               variant="contained"
               onClick={() => {
@@ -266,19 +273,36 @@ function MyComponent(props) {
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'space-evenly',
+                  position: 'relative'
                 }}
               >
                 <img
                   style={{
-                    width: '40px',
-                    height: '40px',
+                    width: '50px',
+                    height: '50px',
                   }}
                   src={url}
                   alt=""
                 />
-                <Typography variant={'h5'}>{display}</Typography>
-                <Typography variant={'body2'}>{descriptor}</Typography>
-                {activating && <CircularProgress size={15} style={{ marginRight: '10px' }} />}
+                <Typography style={{
+                  font: 'normal normal bold 18px/21px Inter !important',
+                  letterSpacing: '-0.36px',
+                  fontFamily: 'Inter',
+                  fontWeight: 'bold',
+                  fontSize: '18px',
+                  lineHeight: '3',
+                }}>{display}</Typography>
+                <Typography style={{
+                  font: 'normal normal 300 13px/16px Inter !important',
+                  fontFamily: 'Inter',
+                  fontWeight: '300',
+                  fontSize: '13px',
+                  lineHeight: '1.2',
+                  letterSpacing: '0px',
+                  opacity: '0.54',
+                  maxWidth: '160px'
+                }}>{descriptor}</Typography>
+                {activating && <CircularProgress size={15} style={{ position: 'absolute' }} />}
                 {!activating && connected && (
                   <div
                     style={{
@@ -291,7 +315,7 @@ function MyComponent(props) {
                   ></div>
                 )}
               </div>
-            </Button>
+            </Paper>
           </div>
         );
       })}

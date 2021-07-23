@@ -186,14 +186,14 @@ class Store {
       return null
     }
 
-    let myParam = ''
+    let myParam = null
 
     if(payload.content && payload.content.address) {
       myParam = payload.content.address
     } else {
       const urlParams = new URLSearchParams(window.location.search);
       myParam = urlParams.get('reward');
-      if(myParam && !web3.utils.isAddress(myParam)) {
+      if(!myParam || !web3.utils.isAddress(myParam)) {
         return null
       }
     }

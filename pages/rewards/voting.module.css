@@ -24,12 +24,13 @@
   position: sticky;
   height: fit-content;
   justify-content: center;
-  top: 4rem;
+  top: 8rem;
   align-items: center;
 }
 
 .copyCentered {
   width: 525px;
+  padding-right: 20px;
 }
 
 .headerContainer {
@@ -83,8 +84,8 @@
 .titleSpacing {
   margin-bottom: 21px !important;
   text-align: left !important;
-  font: normal normal bold 60px/72px Grtsk Giga !important;
-  letter-spacing: 0px;
+  font: normal normal bold 68px/84px Inter !important;
+  letter-spacing: -1.36px;
   color: #FFFFFF !important;
   opacity: 1;
 }
@@ -95,7 +96,7 @@
   letter-spacing: -0.66px  !important;
   color: #FFFFFF  !important;
   opacity: 1  !important;
-}4
+}
 
 .addNetworkButton {
   margin-top: 50px !important;
@@ -165,7 +166,7 @@
   margin-top: 40px;
   margin-bottom: 50px;
   border-bottom: 1px solid #FFFFFF41;
-  width: 524px;
+  width: 450px;
 }
 
 .getMoreVotesBox {
@@ -177,10 +178,9 @@
 }
 
 .getMoreVotesText {
-  font: normal normal bold 22px/26px Grtsk Giga  !important;
-  letter-spacing: 1.54px  !important;
+  font: normal normal bold 29px/35px Inter !important;
+  letter-spacing: -0.29px  !important;
   color: #FFFFFF  !important;
-  text-transform: uppercase;
 }
 
 .addRewardText {
@@ -201,9 +201,25 @@
   justify-content: center;
 }
 
-.connectText {
-  font: normal normal 300 22px/33px Inter !important;
-  margin-bottom: 24px !important;
+.thumbIcon {
+  color: #FFD764;
+  font-size: 30px !important;
+}
+
+.connectContainer {
+  height: 100vh;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.connectWalletText {
+  font: normal normal bold 28px/34px Inter !important;
+  letter-spacing: -0.56px;
 }
 
 @media screen and (max-width: 1700px) {

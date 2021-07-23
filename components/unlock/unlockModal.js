@@ -11,7 +11,7 @@ class UnlockModal extends Component {
   render() {
     const { closeModal, modalOpen } = this.props;
 
-    const fullScreen = window.innerWidth < 576;
+    // const fullScreen = window.innerWidth < 576;
 
     return (
       <Dialog
@@ -20,7 +20,6 @@ class UnlockModal extends Component {
         fullWidth={true}
         maxWidth={"sm"}
         TransitionComponent={Transition}
-        fullScreen={fullScreen}
       >
         <DialogContent>
           <Unlock closeModal={closeModal} />
