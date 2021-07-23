@@ -10,6 +10,11 @@ import BigNumber from "bignumber.js";
 
 export function formatCurrency(amount, decimals = 2) {
   if (!isNaN(amount)) {
+
+    if(BigNumber(amount).lt(0.01)) {
+      return '< 0.01'
+    }
+
     const formatter = new Intl.NumberFormat(undefined, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals
