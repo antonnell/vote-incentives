@@ -241,7 +241,7 @@ function Voting({ changeTheme, theme }) {
           {
             !account &&
             <div className={ classes.connectContainer}>
-              <Typography className={ classes.connectWalletText }>Connect your wallet to continue</Typography>
+              <Typography className={ classes.connectWalletText }>Connect your wallet to find your rewards.</Typography>
               <Unlock />
             </div>
           }
