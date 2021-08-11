@@ -133,6 +133,33 @@
   color: #fff;
 }
 
+.typeTextFantom {
+  font: normal normal bold 12px/23px Inter !important;
+  background: #1969ff;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 0px 12px;
+  color: #fff;
+}
+
+.typeTextPolygon {
+  font: normal normal bold 12px/23px Inter !important;
+  background: #8247e5;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 0px 12px;
+  color: #fff;
+}
+
+.typeTextXDAI {
+  font: normal normal bold 12px/23px Inter !important;
+  background: #62a7a5;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 0px 12px;
+  color: #fff;
+}
+
 .buttonText {
   font-size: 12px !important;
 }

@@ -179,14 +179,24 @@ function Voting({ changeTheme, theme }) {
 
                 return true
               }).map((gauge) => {
+                let chainClass = classes.typeText
+                if(gauge.gaugeTypeName === 'Fantom') {
+                  chainClass = classes.typeTextFantom
+                } else if(gauge.gaugeTypeName === 'Polygon') {
+                  chainClass = classes.typeTextPolygon
+                } else if(gauge.gaugeTypeName === 'xDAI') {
+                  chainClass = classes.typeTextXDAI
+                }
+
+
                 return (
                   <div className={ classes.tableRow }>
                     <div className={ classes.poolRow }>
-                      <img src='/unknown-logo.png' alt='' width='40px' height='40px' className={ classes.assetIcon } />
+                      <img src={ gauge.logo } alt='' width='40px' height='40px' className={ classes.assetIcon } />
                       <Typography className={ classes.nameText }>{gauge.name}</Typography>
                     </div>
                     <div className={ classes.typeRow }>
-                      <Typography className={ classes.typeText }>{gauge.gaugeTypeName}</Typography>
+                      <Typography className={ chainClass }>{gauge.gaugeTypeName}</Typography>
                     </div>
                     <div className={ classes.actionRow }>
                       <Button

@@ -134,6 +134,38 @@ class Store {
         // if not 0, we cant get LP token info cause it is on a different chain
         const lpToken = new web3.eth.Contract(ERC20_ABI, lpTokenAddress)
         name = await lpToken.methods.name().call()
+      } else {
+        //manually map gauge names
+        switch (gaugeAddress) {
+          case '0xb9C05B8EE41FDCbd9956114B3aF15834FDEDCb54':
+            name = 'Curve.fi DAI/USDC (DAI+USDC)'
+            break;
+          case '0xfE1A3dD8b169fB5BF0D5dbFe813d956F39fF6310':
+            name = 'Curve.fi fUSDT/DAI/USDC'
+            break;
+          case '0xC48f4653dd6a9509De44c92beb0604BEA3AEe714':
+            name = 'Curve.fi amDAI/amUSDC/amUSDT'
+            break;
+          case '0x6955a55416a06839309018A8B0cB72c4DDC11f15':
+            name = 'Curve.fi USD-BTC-ETH'
+            break;
+          case '0x488E6ef919C2bB9de535C634a80afb0114DA8F62':
+            name = 'Curve.fi amWBTC/renBTC'
+            break;
+          case '0xfDb129ea4b6f557b07BcDCedE54F665b7b6Bc281':
+            name = 'Curve.fi WBTC/renBTC'
+            break;
+          case '0x060e386eCfBacf42Aa72171Af9EFe17b3993fC4F':
+            name = 'Curve USD-BTC-ETH'
+            break;
+          case '0x6C09F6727113543Fd061a721da512B7eFCDD0267':
+            name = 'Curve.fi wxDAI/USDC/USDT'
+            break;
+          case '0xDeFd8FdD20e0f34115C7018CCfb655796F6B2168':
+            name = 'Curve.fi USD-BTC-ETH'
+            break;
+          default:
+        }
       }
 
       return {
@@ -142,7 +174,8 @@ class Store {
         name: name,
         gaugeWeight: gaugeWeight,
         gaugeType: gaugeType,
-        gaugeTypeName: this._mapGaugeTypeToName(gaugeType)
+        gaugeTypeName: this._mapGaugeTypeToName(gaugeType),
+        logo: '/unknown-logo.png'
       }
     } catch(ex) {
       console.log("------------------------------------")
@@ -150,6 +183,54 @@ class Store {
       console.log(ex)
       console.log("------------------------------------")
       return ex
+    }
+  }
+
+  _mapGaugeToLogo = (address) => {
+    const base = 'https://curve.fi/static/icons/svg/crypto-icons-stack-2-ethereum.svg#'
+    switch (address) {
+      // case '0x7ca5b0a2910B33e9759DC7dDB0413949071D7575':
+      //   return `${base}comp`
+      // case '0xBC89cd85491d81C6AD2954E6d0362Ee29fCa8F53':
+      //   return `${base}usdt`
+      // case '0xFA712EE4788C042e2B7BB55E6cb8ec569C4530c1':
+      //   return `${base}yfi`
+      // case '0x69Fb7c45726cfE2baDeE8317005d3F94bE838840':
+      //   return `${base}comp`
+      // case '0x64E3C23bfc40722d3B649844055F1D51c1ac041d':
+      //   return `${base}comp`
+      // case '0xB1F2cdeC61db658F091671F5f199635aEF202CAC':
+      //   return `${base}comp`
+      // case '0xA90996896660DEcC6E997655E065b23788857849':
+      //   return `${base}comp`
+      // case '0x705350c4BcD35c9441419DdD5d2f097d7a55410F':
+      //   return `${base}comp`
+      // case '0x4c18E409Dc8619bFb6a1cB56D114C3f592E0aE79':
+      //   return `${base}comp`
+      // case '0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A':
+      //   return `${base}comp`
+      // case '0x18478F737d40ed7DEFe5a9d6F1560d84E283B74e':
+      //   return `${base}comp`
+      // case '0xC5cfaDA84E902aD92DD40194f0883ad49639b023':
+      //   return `${base}comp`
+      // case '0x2db0E83599a91b508Ac268a6197b8B14F5e72840':
+      //   return `${base}comp`
+      // case '0xC2b1DF84112619D190193E48148000e3990Bf627':
+      //   return `${base}comp`
+      // case '0xF98450B5602fa59CC66e1379DFfB6FDDc724CfC4':
+      //   return `${base}comp`
+      // case '0x5f626c30EC1215f4EdCc9982265E8b1F411D1352':
+      //   return `${base}comp`
+      // case '0x6828bcF74279eE32f2723eC536c22c51Eed383C6':
+      //   return `${base}comp`
+      // case '0x4dC4A289a8E33600D8bD4cf5F6313E43a37adec7':
+      //   return `${base}comp`
+      // case '0xAEA6c312f4b3E04D752946d329693F7293bC2e6D':
+      //   return `${base}comp`
+      // case '0xdFc7AdFa664b08767b735dE28f9E84cd30492aeE':
+      //   return `${base}comp`
+      default:
+        return `/unknown-logo.png`
     }
   }
 
@@ -162,9 +243,11 @@ class Store {
       case '2':
         return 'Polygon'
       case '3':
-        return 'Crypto Pools'
+        return 'Ethereum'
       case '4':
         return 'xDAI'
+      case '5':
+        return 'Ethereum'
       default:
         return 'Unknown'
     }
@@ -344,7 +427,10 @@ class Store {
 
     let sendAmount = BigNumber(rewardAmount).times(10**rewardToken.decimals).toFixed(0)
 
-    this._checkAllowance(web3, rewardToken.address, account.address, BRIBERY_ADDRESS, sendAmount, () => {
+    this._checkAllowance(web3, rewardToken.address, account.address, BRIBERY_ADDRESS, sendAmount, (err) => {
+      if (err) {
+        return this.emitter.emit(ERROR, err);
+      }
       this._callAddReward(web3, account, gauge.gaugeAddress, rewardToken.address, sendAmount, (err, res) => {
         if (err) {
           return this.emitter.emit(ERROR, err);

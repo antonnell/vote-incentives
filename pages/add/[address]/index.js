@@ -188,7 +188,7 @@ function Voting({ changeTheme, theme }) {
           </div>
           <Paper className={ classes.actionContainer }>
             <div className={ classes.selectedField }>
-              <img src='/unknown-logo.png' width='55px' height='55px' className={ classes.assetIcon } />
+              <img src={ gauge.logo } width='55px' height='55px' className={ classes.assetIcon } />
               <div className={ classes.assetDetails }>
                 <Typography className={ classes.assetNameText }>{ gauge ? gauge.name : ''}</Typography>
                 <Typography color='textSecondary' className={ classes.assetNameSubText }>{ gauge ? formatAddress(gauge.gaugeAddress) : '' }</Typography>

@@ -11,7 +11,7 @@ import BigNumber from "bignumber.js";
 export function formatCurrency(amount, decimals = 2) {
   if (!isNaN(amount)) {
 
-    if(BigNumber(amount).lt(0.01)) {
+    if(BigNumber(amount).gt(0) && BigNumber(amount).lt(0.01)) {
       return '< 0.01'
     }
 
