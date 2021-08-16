@@ -250,10 +250,12 @@ class Store {
       return null;
     }
 
-    const gauges = this.getStore('gauges')
+    let gauges = this.getStore('gauges')
     if(!gauges || gauges.length === 0) {
       return null
     }
+
+    gauges = await this._getCurrentGaugeVotes(web3, account, gauges)
 
     let myParam = null
 
@@ -399,14 +401,14 @@ class Store {
     if(gaugesPerRewardV2.length > 0) {
       briberyResultsPromisesV2 = gaugesPerRewardV2.map(async (gauge) => {
 
-        const [activePeriod, claimable, lastUserClaim, tokensForBribe, rewardsPerGauge, rewardPerToken] = await Promise.all([
+        const [activePeriod, claimable, lastUserClaim, tokensForBribe, rewardsPerGauge, rewardPerToken, userVoteSlope] = await Promise.all([
           briberyV2.methods.active_period(gauge, rewardTokenAddress).call(),
           briberyV2.methods.claimable(account.address, gauge, rewardTokenAddress).call(),
           briberyV2.methods.last_user_claim(account.address, gauge, rewardTokenAddress).call(),
           briberyV2.methods.tokens_for_bribe(account.address, gauge, rewardTokenAddress).call(),
           briberyV2.methods.rewards_per_gauge(gauge).call(),
           briberyV2.methods.reward_per_token(gauge, rewardTokenAddress).call(),
-        ]); 
+        ]);
 
         return {
           version: 2,
@@ -427,6 +429,22 @@ class Store {
     // const briberyResultsV1 = await Promise.all(briberyResultsPromisesV1);
     const briberyResultsV2 = await Promise.all(briberyResultsPromisesV2);
     return [briberyResultsV2]
+  }
+
+  _getCurrentGaugeVotes = async (web3, account, gauges) => {
+    const gaugeController = new web3.eth.Contract(GAUGE_CONTROLLER_ABI, GAUGE_CONTROLLER_ADDRESS)
+
+    const userVoteSlopes = await Promise.all(gauges.map((gauge) => {
+      return gaugeController.methods.vote_user_slopes(account.address, gauge.gaugeAddress).call()
+    }));
+
+    for(let i = 0; i < gauges.length; i++) {
+      gauges[i].votes = userVoteSlopes[i]
+      gauges[i].votes.userVoteSlopeAmount = BigNumber(userVoteSlopes[i].slope).div(10**10).toFixed(10)
+      gauges[i].votes.userVoteSlopePercent = BigNumber(userVoteSlopes[i].power).div(100).toFixed(2)
+    }
+
+    return gauges
   }
 
   claimReward = async (payload) => {

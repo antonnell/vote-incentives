@@ -6,6 +6,14 @@
   border-bottom: 3px solid #0048FF;
 }
 
+.chainContainerPositive {
+  width: 100%;
+  border-radius: 30px !important;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 3px solid #4aa166;
+}
+
 .tryButton {
   width: 100%;
   display: flex;
@@ -13,8 +21,13 @@
   margin-top: 24px !important;
 }
 
-.descriptionText {
+.descriptionPreText {
   padding-top: 30px;
+  font: normal normal 300 13px/16px Inter !important;
+  opacity: 0.54;
+}
+
+.descriptionText {
   font: normal normal bold 28px/34px Inter !important;
 }
 

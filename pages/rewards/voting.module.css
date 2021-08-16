@@ -77,7 +77,7 @@
   grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(33% - 15px);
   gap: 30px;
   max-width: 900px;
-  margin-top: 80px;
+  margin-top: 40px;
 }
 
 .titleSpacing {
@@ -219,6 +219,13 @@
   font: normal normal bold 28px/34px Inter !important;
   letter-spacing: -0.56px;
   margin-bottom: 30px !important;
+}
+
+.cardsHeader {
+  margin: 0 auto !important;
+  padding: 24px 80px;
+  max-width: 900px;
+  margin-top: 40px !important;
 }
 
 @media screen and (max-width: 1700px) {

@@ -17,6 +17,8 @@ import AppsIcon from '@material-ui/icons/Apps';
 import ListIcon from '@material-ui/icons/List';
 import AddIcon from '@material-ui/icons/Add';
 
+import BigNumber from 'bignumber.js';
+
 import classes from './voting.module.css';
 
 import stores from '../../stores/index.js';
@@ -203,6 +205,13 @@ function Voting({ changeTheme, theme }) {
     router.push('/add');
   }
 
+  const claimableRewards = rewards.filter((reward) => {
+    return BigNumber(reward.claimable).gt(0)
+  })
+  const potentialRewards = rewards.filter((reward) => {
+    return BigNumber(reward.claimable).eq(0)
+  })
+
   return (
     <Layout changeTheme={changeTheme}>
       <div className={ theme.palette.type === 'dark' ? classes.containerDark : classes.container }>
@@ -275,13 +284,32 @@ function Voting({ changeTheme, theme }) {
                 </div>
                 <Header changeTheme={ changeTheme } />
               </div>
-              <div className={ classes.cardsContainer }>
-                {
-                  rewards.map((reward, idx) => {
-                    return <RewardCard reward={ reward } key={ idx } />
-                  })
-                }
-              </div>
+              {
+                claimableRewards.length > 0 &&
+                <>
+                  <Typography className={ classes.cardsHeader }>Claimable Rewards:</Typography>
+                  <div className={ classes.cardsContainer }>
+                    {
+                      claimableRewards.map((reward, idx) => {
+                        return <RewardCard reward={ reward } key={ idx } />
+                      })
+                    }
+                  </div>
+                </>
+              }
+              {
+                potentialRewards.length > 0 &&
+                <>
+                  <Typography className={ classes.cardsHeader }>Potential Rewards:</Typography>
+                  <div className={ classes.cardsContainer }>
+                    {
+                      potentialRewards.map((reward, idx) => {
+                        return <RewardCard reward={ reward } key={ idx } />
+                      })
+                    }
+                  </div>
+                </>
+              }
             </>
           }
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Paper, Grid, Button, FormControlLabel, Checkbox } from '@material-ui/core'
+import { Typography, Paper, Grid, Button, FormControlLabel, Checkbox, Tooltip } from '@material-ui/core'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import RedeemIcon from '@material-ui/icons/Redeem';
 import BigNumber from 'bignumber.js';
@@ -126,8 +126,9 @@ export default function RewardCard({ reward }) {
   const renderAvailable = () => {
     return (
       <>
-        <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(reward.tokensForBribe) } { reward.rewardToken.symbol }</Typography>
-        <Typography className={ classes.descriptionSubText } align='center'>Potential rewards for voting for {reward.gauge.name}</Typography>
+        <Typography className={ classes.descriptionPreText } align='center'>Current receive amount:</Typography>
+        <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(reward.tokensForBribe).times(reward.gauge.votes.userVoteSlopePercent).div(100)) } { reward.rewardToken.symbol }</Typography>
+        <Typography className={ classes.descriptionSubText } align='center'>You could receive {formatCurrency(reward.tokensForBribe)} { reward.rewardToken.symbol } for voting 100% for {reward.gauge.name}</Typography>
         <Button
           className={ classes.tryButton }
           variant='outlined'
@@ -142,8 +143,21 @@ export default function RewardCard({ reward }) {
     )
   }
 
+  const getContainerClass = () => {
+    if(BigNumber(reward.claimable).gt(0)) {
+      return classes.chainContainerPositive
+    } else if (BigNumber(reward.gauge.votes.userVoteSlopePercent).gt(0)) {
+      return classes.chainContainerPositive
+    } else if (BigNumber(reward.gauge.votes.userVoteSlopePercent).eq(0)) {
+      return classes.chainContainer
+    }
+
+
+
+  }
+
   return (
-    <Paper elevation={ 1 } className={ classes.chainContainer } key={ reward.id } >
+    <Paper elevation={ 1 } className={ getContainerClass() } key={ reward.id } >
       <ThemeProvider theme={theme}>
         <div className={ classes.topInfo }>
           <RedeemIcon className={ classes.avatar } />
