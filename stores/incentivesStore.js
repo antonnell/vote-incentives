@@ -363,34 +363,34 @@ class Store {
     const briberyV2 = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_ADDRESS_V2)
 
     //For V1, baad, loop through all the gauges etc.
-    let briberyResultsV1 = await Promise.all(gauges.map(async (gauge) => {
-      const [activePeriod, claimable, lastUserClaim, rewardPerToken] = await Promise.all([
-        bribery.methods.active_period(gauge.gaugeAddress, rewardTokenAddress).call(),
-        bribery.methods.claimable(account.address, gauge.gaugeAddress, rewardTokenAddress).call(),
-        bribery.methods.last_user_claim(account.address, gauge.gaugeAddress, rewardTokenAddress).call(),
-        bribery.methods.reward_per_token(gauge.gaugeAddress, rewardTokenAddress).call(),
-      ]);
-
-      if(BigNumber(activePeriod).eq(0)) {
-        return null
-      }
-
-      return {
-        version: 1,
-        claimable,
-        lastUserClaim,
-        activePeriod,
-        rewardPerToken,
-        tokensForBribe: 0,
-        canClaim: BigNumber(block).lt(BigNumber(activePeriod).plus(WEEK)),
-        hasClaimed: BigNumber(lastUserClaim).eq(activePeriod),
-        gauge: gauge,
-        rewardToken: rewardTokens.filter((r) => { return r.address.toLowerCase() === rewardTokenAddress.toLowerCase() })[0]
-      }
-    }))
-    briberyResultsV1 = briberyResultsV1.filter((bribe) => {
-      return bribe !== null
-    })
+    // let briberyResultsV1 = await Promise.all(gauges.map(async (gauge) => {
+    //   const [activePeriod, claimable, lastUserClaim, rewardPerToken] = await Promise.all([
+    //     bribery.methods.active_period(gauge.gaugeAddress, rewardTokenAddress).call(),
+    //     bribery.methods.claimable(account.address, gauge.gaugeAddress, rewardTokenAddress).call(),
+    //     bribery.methods.last_user_claim(account.address, gauge.gaugeAddress, rewardTokenAddress).call(),
+    //     bribery.methods.reward_per_token(gauge.gaugeAddress, rewardTokenAddress).call(),
+    //   ]);
+    //
+    //   if(BigNumber(activePeriod).eq(0)) {
+    //     return null
+    //   }
+    //
+    //   return {
+    //     version: 1,
+    //     claimable,
+    //     lastUserClaim,
+    //     activePeriod,
+    //     rewardPerToken,
+    //     tokensForBribe: 0,
+    //     canClaim: BigNumber(block).lt(BigNumber(activePeriod).plus(WEEK)),
+    //     hasClaimed: BigNumber(lastUserClaim).eq(activePeriod),
+    //     gauge: gauge,
+    //     rewardToken: rewardTokens.filter((r) => { return r.address.toLowerCase() === rewardTokenAddress.toLowerCase() })[0]
+    //   }
+    // }))
+    // briberyResultsV1 = briberyResultsV1.filter((bribe) => {
+    //   return bribe !== null
+    // })
 
 
     // For V2 call gauges_per_reward.
@@ -426,9 +426,8 @@ class Store {
       })
     }
 
-    // const briberyResultsV1 = await Promise.all(briberyResultsPromisesV1);
     const briberyResultsV2 = await Promise.all(briberyResultsPromisesV2);
-    return [briberyResultsV1, briberyResultsV2]
+    return [briberyResultsV2]
   }
 
   _getCurrentGaugeVotes = async (web3, account, gauges) => {
