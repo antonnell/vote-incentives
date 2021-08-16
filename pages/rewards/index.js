@@ -211,6 +211,14 @@ function Voting({ changeTheme, theme }) {
   })
   const potentialRewards = rewards.filter((reward) => {
     return BigNumber(reward.claimable).eq(0) && BigNumber(reward.rewardsUnlock).gt(moment().unix())
+  }).sort((a, b) => {
+    if ( BigNumber(a.tokensForBribe).gt(b.tokensForBribe) ){
+      return -1;
+    }
+    if ( BigNumber(a.tokensForBribe).lt(b.tokensForBribe) ){
+      return 1;
+    }
+    return 0;
   })
 
   return (
