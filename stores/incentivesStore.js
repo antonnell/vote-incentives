@@ -127,7 +127,7 @@ class Store {
 
       const gaugeWeight = await gaugeController.methods.gauge_relative_weight(gaugeAddress).call()
 
-      if(gaugeType === '0') {
+      if(['0', '5', '6'].includes(gaugeType)) {
         const gauge = new web3.eth.Contract(GAUGE_CONTRACT_ABI, gaugeAddress)
         lpTokenAddress = await gauge.methods.lp_token().call()
 
@@ -163,6 +163,9 @@ class Store {
             break;
           case '0xDeFd8FdD20e0f34115C7018CCfb655796F6B2168':
             name = 'Curve.fi USD-BTC-ETH'
+            break;
+          case '0xd8b712d29381748dB89c36BCa0138d7c75866ddF':
+            name = 'Curve.fi Factory USD Metapool: Magic Internet Money 3Pool'
             break;
           default:
         }
@@ -237,6 +240,8 @@ class Store {
   _mapGaugeTypeToName = (gaugeType) => {
     switch (gaugeType) {
       case '0':
+      case '5':
+      case '6':
         return 'Ethereum'
       case '1':
         return 'Fantom'
@@ -246,8 +251,6 @@ class Store {
         return 'Ethereum'
       case '4':
         return 'xDAI'
-      case '5':
-        return 'Ethereum'
       default:
         return 'Unknown'
     }
