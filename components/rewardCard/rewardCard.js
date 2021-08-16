@@ -3,7 +3,6 @@ import { Typography, Paper, Grid, Button, FormControlLabel, Checkbox } from '@ma
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import RedeemIcon from '@material-ui/icons/Redeem';
 import BigNumber from 'bignumber.js';
-
 import classes from './rewardCard.module.css'
 
 import stores from '../../stores/index.js'
@@ -60,12 +59,17 @@ export default function RewardCard({ reward }) {
 
   const [ checked, setChecked ] = useState(false)
   const [ claiming, setClaiming ] = useState(false)
+  const [ voting, setVoting ] = useState(false)
 
   const onClaim = () => {
     if(!claiming) {
       stores.dispatcher.dispatch({ type: CLAIM_REWARD, content: { reward }})
       setClaiming(true)
     }
+  }
+
+  const onVote = () => {
+
   }
 
   useEffect(function () {
@@ -86,36 +90,68 @@ export default function RewardCard({ reward }) {
     };
   }, []);
 
+  const renderClaimable = () => {
+    return (
+      <>
+        <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(reward.claimable) } { reward.rewardToken.symbol }</Typography>
+        <Typography className={ classes.descriptionSubText } align='center'>Your reward for voting for {reward.gauge.name}</Typography>
+        {
+          reward.hasClaimed &&
+          <Button
+            className={ classes.tryButton }
+            variant='outlined'
+            disableElevation
+            color='primary'
+          >
+            <Typography className={ classes.buttonLabel }>Reward Claimed</Typography>
+          </Button>
+        }
+        {
+          !reward.hasClaimed &&
+          <Button
+            className={ classes.tryButton }
+            variant='outlined'
+            disableElevation
+            onClick={ onClaim }
+            color='primary'
+            disabled={ claiming }
+          >
+            <Typography className={ classes.buttonLabel }>{ claiming ? 'Claiming ...' : 'Claim Reward'}</Typography>
+          </Button>
+        }
+      </>
+    )
+  }
+
+  const renderAvailable = () => {
+    return (
+      <>
+        <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(reward.tokensForBribe) } { reward.rewardToken.symbol }</Typography>
+        <Typography className={ classes.descriptionSubText } align='center'>Potential rewards for voting for {reward.gauge.name}</Typography>
+        <Button
+          className={ classes.tryButton }
+          variant='outlined'
+          disableElevation
+          onClick={ onVote }
+          color='primary'
+          disabled={ voting }
+        >
+          <Typography className={ classes.buttonLabel }>{ voting ? 'Voting ...' : 'Cast Vote'}</Typography>
+        </Button>
+      </>
+    )
+  }
+
   return (
     <Paper elevation={ 1 } className={ classes.chainContainer } key={ reward.id } >
       <ThemeProvider theme={theme}>
         <div className={ classes.topInfo }>
           <RedeemIcon className={ classes.avatar } />
-          <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(reward.claimable).div(reward.rewardToken.decimals).toFixed(reward.rewardToken.decimals)) } { reward.rewardToken.symbol }</Typography>
-          <Typography className={ classes.descriptionSubText } align='center'>Your reward for voting for {reward.gauge.name}</Typography>
           {
-            reward.hasClaimed &&
-            <Button
-              className={ classes.tryButton }
-              variant='outlined'
-              disableElevation
-              color='primary'
-            >
-              <Typography className={ classes.buttonLabel }>Reward Claimed</Typography>
-            </Button>
+            BigNumber(reward.claimable).gt(0) && renderClaimable()
           }
           {
-            !reward.hasClaimed &&
-            <Button
-              className={ classes.tryButton }
-              variant='outlined'
-              disableElevation
-              onClick={ onClaim }
-              color='primary'
-              disabled={ claiming }
-            >
-              <Typography className={ classes.buttonLabel }>{ claiming ? 'Claiming ...' : 'Claim Reward'}</Typography>
-            </Button>
+            BigNumber(reward.claimable).eq(0) && renderAvailable()
           }
         </div>
       </ThemeProvider>
