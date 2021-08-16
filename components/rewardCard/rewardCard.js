@@ -70,7 +70,7 @@ export default function RewardCard({ reward }) {
   }
 
   const onVote = () => {
-
+    window.open('https://dao.curve.fi/gaugeweight')
   }
 
   useEffect(function () {
