@@ -25,7 +25,6 @@ import { NextRouter } from 'next/router'
 
 import { ERC20_ABI, BRIBERY_ABI, GAUGE_CONTROLLER_ABI, GAUGE_CONTRACT_ABI } from './abis';
 
-import * as moment from 'moment';
 
 import stores from './';
 import { bnDec } from '../utils';
@@ -306,6 +305,8 @@ class Store {
         for(let i = 0; i < bribery.length; i++) {
           let bribe = bribery[i]
           rewards.push({
+            activePeriod: bribe.activePeriod,
+            rewardsUnlock: BigNumber(bribe.activePeriod).plus(WEEK).toFixed(0),
             claimable: BigNumber(bribe.claimable).div(10**bribe.rewardToken.decimals).toFixed(bribe.rewardToken.decimals),
             canClaim: bribe.canClaim,
             hasClaimed: bribe.hasClaimed,

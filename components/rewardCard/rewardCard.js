@@ -5,6 +5,7 @@ import RedeemIcon from '@material-ui/icons/Redeem';
 import BigNumber from 'bignumber.js';
 import classes from './rewardCard.module.css'
 
+import * as moment from 'moment';
 import stores from '../../stores/index.js'
 import { getProvider, formatCurrency } from '../../utils'
 
@@ -128,7 +129,8 @@ export default function RewardCard({ reward }) {
       <>
         <Typography className={ classes.descriptionPreText } align='center'>Current receive amount:</Typography>
         <Typography className={ classes.descriptionText} align='center' >{ formatCurrency(BigNumber(reward.tokensForBribe).times(reward.gauge.votes.userVoteSlopePercent).div(100)) } { reward.rewardToken.symbol }</Typography>
-        <Typography className={ classes.descriptionSubText } align='center'>You could receive {formatCurrency(reward.tokensForBribe)} { reward.rewardToken.symbol } for voting 100% for {reward.gauge.name}</Typography>
+        <Typography className={ classes.descriptionSubText } align='center'>100% vote for {reward.gauge.name} gives you {formatCurrency(reward.tokensForBribe)} { reward.rewardToken.symbol }</Typography>
+        <Typography className={ classes.descriptionUnlock } align='center'>Unlocks {moment.unix(reward.rewardsUnlock).fromNow()}</Typography>
         <Button
           className={ classes.tryButton }
           variant='outlined'
@@ -137,7 +139,7 @@ export default function RewardCard({ reward }) {
           color='primary'
           disabled={ voting }
         >
-          <Typography className={ classes.buttonLabel }>{ voting ? 'Voting ...' : 'Cast Vote'}</Typography>
+          <Typography className={ classes.buttonLabel }>{ voting ? 'Voting ...' : 'Cast Vote' }</Typography>
         </Button>
       </>
     )

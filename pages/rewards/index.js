@@ -300,7 +300,7 @@ function Voting({ changeTheme, theme }) {
               {
                 potentialRewards.length > 0 &&
                 <>
-                  <Typography className={ classes.cardsHeader }>Potential Rewards:</Typography>
+                  <Typography className={ classes.cardsHeader }>Upcoming Rewards:</Typography>
                   <div className={ classes.cardsContainer }>
                     {
                       potentialRewards.map((reward, idx) => {

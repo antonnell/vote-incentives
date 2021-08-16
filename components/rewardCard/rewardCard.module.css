@@ -28,6 +28,7 @@
 }
 
 .descriptionText {
+  padding-top: 12px;
   font: normal normal bold 28px/34px Inter !important;
 }
 
@@ -35,6 +36,11 @@
   padding-top: 12px;
   font: normal normal 300 13px/16px Inter !important;
   opacity: 0.54;
+}
+
+.descriptionUnlock {
+  padding-top: 12px;
+  font: normal normal 300 13px/16px Inter !important;
 }
 
 .topInfo {
