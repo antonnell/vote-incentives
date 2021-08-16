@@ -1,13 +1,9 @@
 .container {
-  display: grid;
-  grid-template-columns: 800px calc(100vw - 800px);
   position: relative;
   box-sizing: border-box;
 }
 
 .containerDark {
-  display: grid;
-  grid-template-columns: 800px calc(100vw - 800px);
   position: relative;
   box-sizing: border-box;
 }
@@ -15,16 +11,19 @@
 .leftContainer {
   background: transparent url('../../public/Group 4869.png') 0% 0% no-repeat padding-box;
   opacity: 1;
+  position: fixed;
+  top: 0px;
+  min-height: 100%;
+  width: 800px;
 }
 
 .copyContainer {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: sticky;
   height: fit-content;
   justify-content: center;
-  top: 10rem;
+  padding-top: 10rem;
   align-items: center;
 }
 
@@ -58,16 +57,18 @@
 
 .listContainer {
   min-height: 100vh;
-  width: 100%;
+  width: calc(100% - 800px);
   align-items: flex-start;
   background: #f3f3f3;
+  margin-left: 800px;
 }
 
 .listContainerDark {
   min-height: 100vh;
-  width: 100%;
+  width: calc(100% - 800px);
   align-items: flex-start;
   background: #141C2F;
+  margin-left: 800px;
 }
 
 .cardsContainer {
@@ -76,7 +77,7 @@
   display: grid;
   grid-template-columns: calc(33% - 15px) calc(33% - 15px) calc(33% - 15px);
   gap: 30px;
-  max-width: 900px;
+  max-width: 1000px;
   margin-top: 40px;
 }
 
@@ -224,7 +225,7 @@
 .cardsHeader {
   margin: 0 auto !important;
   padding: 24px 80px;
-  max-width: 900px;
+  max-width: 1000px;
   margin-top: 40px !important;
 }
 
@@ -235,17 +236,18 @@
 }
 
 @media screen and (max-width: 1500px) {
-  .container {
-    grid-template-columns: 500px calc(100vw - 517px);
+  .leftContainer {
+    width: 600px;
   }
 
-  .containerDark {
-    grid-template-columns: 500px calc(100vw - 517px);
+  .listContainer {
+    margin-left: 600px;
+    width: calc(100% - 600px);
   }
 
   .headerContainer,
   .headerContainerDark {
-    padding: 24px 48px 48px 48px;
+    padding: 12px;
   }
 
   .cardsContainer {
@@ -270,9 +272,15 @@
     min-height: 100vh;
   }
 
+  .leftContainer {
+    position: relative;
+    width: 100%;
+  }
+
   .listContainer {
     width: calc(100vw - 17px);
     padding: 0px;
+    margin: 0px;
   }
 
   .listContainerDark {

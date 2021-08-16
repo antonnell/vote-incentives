@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import * as moment from 'moment';
 
 import { Typography, Paper, Button, CircularProgress, TextField, InputAdornment } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -209,7 +210,7 @@ function Voting({ changeTheme, theme }) {
     return BigNumber(reward.claimable).gt(0)
   })
   const potentialRewards = rewards.filter((reward) => {
-    return BigNumber(reward.claimable).eq(0)
+    return BigNumber(reward.claimable).eq(0) && BigNumber(reward.rewardsUnlock).gt(moment().unix())
   })
 
   return (
