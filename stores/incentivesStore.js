@@ -12,6 +12,7 @@ import {
   INCENTIVES_BALANCES_RETURNED,
   BRIBERY_ADDRESS,
   BRIBERY_ADDRESS_V2,
+  BRIBERY_TOKENS_ADDRESS_V2,
   GAUGE_CONTROLLER_ADDRESS,
   CLAIM_REWARD,
   REWARD_CLAIMED,
@@ -361,6 +362,7 @@ class Store {
 
     const bribery = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_ADDRESS)
     const briberyV2 = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_ADDRESS_V2)
+    const briberyTokensContract = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_TOKENS_ADDRESS_V2)
 
     //For V1, baad, loop through all the gauges etc.
     // let briberyResultsV1 = await Promise.all(gauges.map(async (gauge) => {
@@ -407,7 +409,7 @@ class Store {
           briberyV2.methods.active_period(gauge, rewardTokenAddress).call(),
           briberyV2.methods.claimable(account.address, gauge, rewardTokenAddress).call(),
           briberyV2.methods.last_user_claim(account.address, gauge, rewardTokenAddress).call(),
-          briberyV2.methods.tokens_for_bribe(account.address, gauge, rewardTokenAddress).call(),
+          briberyTokensContract.methods.tokens_for_bribe(account.address, gauge, rewardTokenAddress).call(),
           briberyV2.methods.reward_per_token(gauge, rewardTokenAddress).call(),
         ]);
 
