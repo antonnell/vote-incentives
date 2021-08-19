@@ -153,7 +153,7 @@ function Voting({ changeTheme, theme }) {
   }
 
   const onBackClicked = () => {
-    router.push(`/`);
+    router.push(`/add`);
   }
 
   const onRewardTokenAddressChanged = (e) => {
@@ -267,6 +267,10 @@ function Voting({ changeTheme, theme }) {
       </div>
     </Layout>
   );
+}
+
+Voting.getInitialProps = async (ctx) => {
+  return ctx
 }
 
 export default withTheme(Voting);
