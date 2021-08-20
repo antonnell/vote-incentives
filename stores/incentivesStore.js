@@ -236,6 +236,16 @@ class Store {
         symbol: 'USDC',
         decimals: 6
       },
+      {
+        address: '0x5a98fcbea516cf06857215779fd812ca3bef1b32',
+        symbol: 'LDO',
+        decimals: 18
+      },
+      {
+        address: '0xdbdb4d16eda451d0503b854cf79d55697f90c8df',
+        symbol: 'ALCX',
+        decimals: 18
+      },
     ]
   }
 
