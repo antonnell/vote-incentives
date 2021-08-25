@@ -10,6 +10,7 @@ import Layout from '../../components/layout/layout.js';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
 import RewardCard from '../../components/rewardCard';
+import VoteRewardCard from '../../components/voteRewardCard';
 import Unlock from '../../components/unlock/unlock.js';
 
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -150,11 +151,12 @@ function Voting({ changeTheme, theme }) {
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
   const [ web3, setWeb3 ] = useState(null)
-  const [loading, setLoading] = useState(false);
-  const [account, setAccount] = useState(null);
+  const [ loading, setLoading ] = useState(true);
+  const [ account, setAccount ] = useState(null);
   const [ search, setSearch ] = useState('')
   const [ searchError, setSearchError ] = useState(false)
   const [ rewards, setRewards ] = useState([])
+  const [ voteRewards, setVoteRewards ] = useState([])
 
   const onConnectWallet = () => {
     stores.emitter.emit(CONNECT_WALLET);
@@ -168,6 +170,8 @@ function Voting({ changeTheme, theme }) {
 
     const balanceReturned = () => {
       setRewards(stores.incentivesStore.getStore('rewards'))
+      setVoteRewards(stores.incentivesStore.getStore('voteRewards'))
+      setLoading(false)
     }
 
     setAccount(stores.accountStore.getStore('account'))
@@ -177,6 +181,7 @@ function Voting({ changeTheme, theme }) {
     stores.emitter.on(INCENTIVES_BALANCES_RETURNED, balanceReturned)
 
     setRewards(stores.incentivesStore.getStore('rewards'))
+    setVoteRewards(stores.incentivesStore.getStore('voteRewards'))
 
     return () => {
       stores.emitter.removeListener(ACCOUNT_CHANGED, accountChanged);
@@ -194,6 +199,7 @@ function Voting({ changeTheme, theme }) {
     if (event.keyCode === 13) {
       if(web3.utils.isAddress(search)) {
         setRewards([])
+        setVoteRewards([])
         stores.dispatcher.dispatch({ type: GET_INCENTIVES_BALANCES, content: { address: search } })
       } else {
         setSearchError(true)
@@ -204,6 +210,10 @@ function Voting({ changeTheme, theme }) {
 
   const onAddReward = () => {
     router.push('/add');
+  }
+
+  const onAddVoteReward = () => {
+    router.push('/addVote')
   }
 
   const claimableRewards = rewards.filter((reward) => {
@@ -221,27 +231,66 @@ function Voting({ changeTheme, theme }) {
     return 0;
   })
 
+  const claimableVoteRewards = voteRewards.filter((reward) => {
+    return reward.voterState === 1 && reward.vote.vote.open !== true
+  })
+  const potentialVoteRewards = voteRewards.filter((reward) => {
+    return reward.vote.vote.open === true
+  }).sort((a, b) => {
+    if ( BigNumber(a.estimateBribe).gt(b.estimateBribe) ){
+      return -1;
+    }
+    if ( BigNumber(a.estimateBribe).lt(b.estimateBribe) ){
+      return 1;
+    }
+    return 0;
+  })
+
+  const renderLoadingSkelly = () => {
+    return (<>
+      <Typography className={ classes.cardsHeader }>Loading Rewards:</Typography>
+      <div className={ classes.cardsContainer }>
+        <Skeleton variant="rect" width={260} height={280} className={ classes.skelly } />
+        <Skeleton variant="rect" width={260} height={280} className={ classes.skelly } />
+        <Skeleton variant="rect" width={260} height={280} className={ classes.skelly } />
+        <Skeleton variant="rect" width={260} height={280} className={ classes.skelly } />
+        <Skeleton variant="rect" width={260} height={280} className={ classes.skelly } />
+        <Skeleton variant="rect" width={260} height={280} className={ classes.skelly } />
+      </div>
+    </>)
+  }
+
   return (
     <Layout changeTheme={changeTheme}>
       <div className={ theme.palette.type === 'dark' ? classes.containerDark : classes.container }>
         <div className={ classes.leftContainer }>
           <div className={ classes.copyContainer }>
             <div className={ classes.copyCentered }>
-              <Typography variant='h1' className={ classes.titleSpacing }><span className={ classes.helpingUnderline }>Gauge Vote Incentives</span></Typography>
+              <Typography variant='h1' className={ classes.titleSpacing }><span className={ classes.helpingUnderline }>CRV Vote Incentives</span></Typography>
               <Typography variant='h2' className={ classes.helpingParagraph }>Get more for your votes! <ThumbUpIcon className={ classes.thumbIcon } /></Typography>
               <div className={ classes.divider }>
               </div>
               <Typography className={ classes.addRewardText }>Add a reward to a pool which will be distributed proportionally to everyone who votes for it.</Typography>
               {
                 account &&
-                  <Button
-                  size='large'
-                  variant='contained'
-                  className={ classes.addNetworkButton }
-                  onClick={ onAddReward }
-                >
-                  <Typography className={ classes.buttonLabel }>Add A Reward</Typography>
-                </Button>
+                  <div className={ classes.addButtons }>
+                    <Button
+                      size='large'
+                      variant='contained'
+                      className={ classes.addNetworkButton }
+                      onClick={ onAddReward }
+                    >
+                      <Typography className={ classes.buttonLabel }>Add Gauge Bribe</Typography>
+                    </Button>
+                    <Button
+                      size='large'
+                      variant='contained'
+                      className={ classes.addNetworkButton }
+                      onClick={ onAddVoteReward }
+                    >
+                      <Typography className={ classes.buttonLabel }>Add Vote Bribe</Typography>
+                    </Button>
+                  </div>
               }
             </div>
             <div className={ classes.socials }>
@@ -251,7 +300,7 @@ function Voting({ changeTheme, theme }) {
                 </svg>
                 <Typography variant='body1' className={ classes.sourceCode }>View Source Code</Typography>
               </a>
-              <Typography variant='subtitle1' className={ classes.version }>Version 1.0.1</Typography>
+              <Typography variant='subtitle1' className={ classes.version }>Version 1.1.0</Typography>
             </div>
           </div>
         </div>
@@ -294,7 +343,10 @@ function Voting({ changeTheme, theme }) {
                 <Header changeTheme={ changeTheme } />
               </div>
               {
-                claimableRewards.length > 0 &&
+                claimableRewards.length === 0 && claimableVoteRewards.length === 0 && potentialRewards.length === 0 && potentialVoteRewards.length === 0 && renderLoadingSkelly()
+              }
+              {
+                (claimableRewards.length > 0 || claimableVoteRewards.length > 0) &&
                 <>
                   <Typography className={ classes.cardsHeader }>Claimable Rewards:</Typography>
                   <div className={ classes.cardsContainer }>
@@ -303,17 +355,27 @@ function Voting({ changeTheme, theme }) {
                         return <RewardCard reward={ reward } key={ idx } />
                       })
                     }
+                    {
+                      claimableVoteRewards.map((reward, idx) => {
+                        return <VoteRewardCard reward={ reward } key={ idx } />
+                      })
+                    }
                   </div>
                 </>
               }
               {
-                potentialRewards.length > 0 &&
+                (potentialRewards.length > 0 || potentialVoteRewards.length > 0) &&
                 <>
                   <Typography className={ classes.cardsHeader }>Upcoming Rewards:</Typography>
                   <div className={ classes.cardsContainer }>
                     {
                       potentialRewards.map((reward, idx) => {
                         return <RewardCard reward={ reward } key={ idx } />
+                      })
+                    }
+                    {
+                      potentialVoteRewards.map((reward, idx) => {
+                        return <VoteRewardCard reward={ reward } key={ idx } />
                       })
                     }
                   </div>

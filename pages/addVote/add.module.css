@@ -1,0 +1,193 @@
+.container {
+
+}
+
+.headContainer {
+  background: transparent url('../../public/Group 4869.png') 0% 0% no-repeat padding-box;
+  position: relative;
+  z-index: 9;
+  position: sticky;
+  top: 0px;
+}
+
+.headContainerContent {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.selectPool {
+  font: normal normal bold 32px/38px Grtsk Giga !important;
+  letter-spacing: 2.88px !important;
+  color: #FFFFFF !important;
+  padding-bottom: 12px;
+  padding-top: 12px;
+}
+
+.choosePool {
+  text-align: center !important;
+  font: normal normal 300 17px/20px Inter !important;
+  letter-spacing: -0.34px !important;
+  color: #FFFFFF !important;
+  padding-bottom: 100px;
+}
+
+.searchField {
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-width: 1200px;
+}
+
+.searchInputAdnornment {
+  font: normal normal bold 16px/35px Inter !important;
+  letter-spacing: 0px;
+}
+
+.tableHeader {
+  padding-top: 32px;
+  background: #f4f5f8;
+  position: sticky;
+  top: 226px;
+  z-index: 8;
+}
+
+.tableHeaderDark {
+  padding-top: 32px;
+  background: #1C253C;
+  position: sticky;
+  top: 226px;
+  z-index: 8;
+}
+
+.tableHeaderRow {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0px;
+}
+
+.tableHeaderText {
+  font: normal normal bold 14px/35px Inter !important;
+  letter-spacing: 0px !important;
+  color: #707786 !important;
+  opacity: 0.6;
+}
+
+.typeRow {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.poolRow {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.assetIcon {
+  margin-right: 24px;
+}
+
+.actionRow {
+  width: 200px;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.tableRow {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0px;
+  border-bottom: 1px solid #B1B6C1;
+}
+
+.chooseButton {
+
+}
+
+.nameText {
+  text-align: left;
+  font: normal normal bold 20px/35px Inter !important;
+  letter-spacing: 0px;
+}
+
+.rowText {
+  font: normal normal bold 16px/35px Inter !important;
+  letter-spacing: 0px;
+}
+
+.typeText {
+  font: normal normal bold 12px/23px Inter !important;
+  background: #b1b6c1;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 0px 12px;
+  color: #fff;
+}
+
+.typeTextFantom {
+  font: normal normal bold 12px/23px Inter !important;
+  background: #1969ff;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 0px 12px;
+  color: #fff;
+}
+
+.typeTextPolygon {
+  font: normal normal bold 12px/23px Inter !important;
+  background: #8247e5;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 0px 12px;
+  color: #fff;
+}
+
+.typeTextXDAI {
+  font: normal normal bold 12px/23px Inter !important;
+  background: #62a7a5;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 0px 12px;
+  color: #fff;
+}
+
+.buttonText {
+  font-size: 12px !important;
+}
+
+.poolHeaderText {
+  padding-left: 64px
+}
+
+.bar {
+  background: #dedede;
+  width: 90%;
+  height: 16px;
+  position: relative;
+}
+
+.yeas {
+  background: #4aa166;
+  height: 100%;
+  width: 0%;
+}
+
+.quorumRequired {
+  border-right: 1px solid black;
+  position: absolute;
+  top: 0px;
+  height: 100%;
+}

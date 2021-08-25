@@ -74,7 +74,7 @@ class Unlock extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     stores.emitter.on(CONNECTION_CONNECTED, this.connectionConnected);
     stores.emitter.on(CONNECTION_DISCONNECTED, this.connectionDisconnected);
     stores.emitter.on(ERROR, this.error);
@@ -257,7 +257,6 @@ function MyComponent(props) {
                 justifyContent: 'center',
                 cursor: 'pointer'
               }}
-              variant="contained"
               onClick={() => {
                 onConnectionClicked(currentConnector, name, setActivatingConnector, activate);
               }}

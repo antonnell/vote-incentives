@@ -14,17 +14,21 @@ import {
   BRIBERY_ADDRESS_V2,
   BRIBERY_TOKENS_ADDRESS_V2,
   GAUGE_CONTROLLER_ADDRESS,
+  VOTE_BRIBERY_ADDRESS,
+  VOTE_SOURCE_ADDRESS,
   CLAIM_REWARD,
   REWARD_CLAIMED,
   SEARCH_TOKEN,
   SEARCH_TOKEN_RETURNED,
   ADD_REWARD,
-  ADD_REWARD_RETURNED
+  ADD_REWARD_RETURNED,
+  ADD_VOTE_REWARD,
+  ADD_VOTE_REWARD_RETURNED
 } from './constants';
 import { NextRouter } from 'next/router'
 
 
-import { ERC20_ABI, BRIBERY_ABI, GAUGE_CONTROLLER_ABI, GAUGE_CONTRACT_ABI } from './abis';
+import { ERC20_ABI, BRIBERY_ABI, GAUGE_CONTROLLER_ABI, GAUGE_CONTRACT_ABI, VOTE_SOURCE_ABI, VOTE_BRIBERY_ABI } from './abis';
 
 
 import stores from './';
@@ -41,7 +45,9 @@ class Store {
     this.store = {
       configured: false,
       gauges: [],
-      rewards: []
+      votes: [],
+      rewards: [],
+      voteRewards: []
     };
 
     dispatcher.register(
@@ -61,6 +67,9 @@ class Store {
             break;
           case ADD_REWARD:
             this.addReward(payload);
+            break;
+          case ADD_VOTE_REWARD:
+            this.addVoteReward(payload);
             break;
           default: {
           }
@@ -88,34 +97,82 @@ class Store {
     const gauges = await this._getGauges(web3);
     this.setStore({ gauges: gauges, configured: true })
 
+    const votes = await this._getVotes(web3);
+    this.setStore({ votes: votes })
+
     this.dispatcher.dispatch({ type: GET_INCENTIVES_BALANCES });
     this.emitter.emit(INCENTIVES_CONFIGURED);
   };
 
+  _getVotes = async (web3) => {
+    try {
+      const votesSourceContract = new web3.eth.Contract(VOTE_SOURCE_ABI, VOTE_SOURCE_ADDRESS)
+      const votesBriberyContract = new web3.eth.Contract(VOTE_BRIBERY_ABI, VOTE_BRIBERY_ADDRESS)
+      const nVotes = await votesSourceContract.methods.votesLength().call()
+
+      const arr = [...Array(parseInt(nVotes)).keys()]
+
+      const promises = arr.map(index => {
+        return new Promise((resolve, reject) => {
+          const voteInfo = this._getVoteInfo(web3, votesSourceContract, votesBriberyContract, index);
+          resolve(voteInfo);
+        });
+      });
+
+      const result = await Promise.all(promises);
+
+      return result
+    } catch(ex) {
+      console.log("------------------------------------")
+      console.log(`exception thrown in _getVotes(${web3})`)
+      console.log(ex)
+      console.log("------------------------------------")
+    }
+  }
+
+  _getVoteInfo = async (web3, votesSourceContract, votesBriberyContract, index) => {
+    try {
+      const [vote, rewardsPerVote] = await Promise.all([
+        votesSourceContract.methods.getVote(index).call(),
+        votesBriberyContract.methods.rewards_per_vote(index).call()
+      ]);
+      return {
+        index,
+        vote,
+        rewardsPerVote,
+      }
+    } catch(ex) {
+      console.log("------------------------------------")
+      console.log(`exception thrown in 4(${web3}, ${votesSourceContract}, ${votesBriberyContract}, ${index})`)
+      console.log(ex)
+      console.log("------------------------------------")
+      return ex
+    }
+  }
+
   _getGauges = async (web3) => {
     try {
+      const gaugeController = new web3.eth.Contract(GAUGE_CONTROLLER_ABI, GAUGE_CONTROLLER_ADDRESS)
+      const nGauges = await gaugeController.methods.n_gauges().call()
 
+      const arr = [...Array(parseInt(nGauges)).keys()]
+
+      const promises = arr.map(index => {
+        return new Promise((resolve, reject) => {
+          const gaugeInfo = this._getGaugeInfo(web3, gaugeController, index);
+          resolve(gaugeInfo);
+        });
+      });
+
+      const result = await Promise.all(promises);
+
+      return result
     } catch(ex) {
       console.log("------------------------------------")
       console.log(`exception thrown in _getGauges(${web3})`)
       console.log(ex)
       console.log("------------------------------------")
     }
-    const gaugeController = new web3.eth.Contract(GAUGE_CONTROLLER_ABI, GAUGE_CONTROLLER_ADDRESS)
-    const nGauges = await gaugeController.methods.n_gauges().call()
-
-    const arr = [...Array(parseInt(nGauges)).keys()]
-
-    const promises = arr.map(index => {
-      return new Promise((resolve, reject) => {
-        const gaugeInfo = this._getGaugeInfo(web3, gaugeController, index);
-        resolve(gaugeInfo);
-      });
-    });
-
-    const result = await Promise.all(promises);
-
-    return result
   }
 
   _getGaugeInfo = async (web3, gaugeController, index) => {
@@ -333,7 +390,14 @@ class Store {
       this.emitter.emit(INCENTIVES_BALANCES_RETURNED, []);
     })
 
+    let votes = this.getStore('votes')
+    if(!votes || votes.length === 0) {
+      return null
+    }
 
+    const voteRewards = await this._getVoteBribery(web3, account, votes)
+    this.setStore({ voteRewards: voteRewards })
+    this.emitter.emit(INCENTIVES_BALANCES_RETURNED, []);
   };
 
   _getTokenInfo = async (web3, tokenAddress, getBalance) => {
@@ -367,43 +431,51 @@ class Store {
     }
   }
 
+  _getVoteBribery = async (web3, account, votes) => {
+    const voteBriberyContract = new web3.eth.Contract(VOTE_BRIBERY_ABI, VOTE_BRIBERY_ADDRESS)
+    const votesSourceContract = new web3.eth.Contract(VOTE_SOURCE_ABI, VOTE_SOURCE_ADDRESS)
+
+    const res = await Promise.all(votes.map(async (vote) => {
+
+      if(!vote.rewardsPerVote || vote.rewardsPerVote.length === 0) {
+        return null
+      }
+
+      const rewards = await Promise.all(vote.rewardsPerVote.map(async (rewardTokenAddress) => {
+          const [estimateBribe, rewardAmount, voterState, hsaClaimed] = await Promise.all([
+            voteBriberyContract.methods.estimate_bribe(vote.index, rewardTokenAddress, account.address).call(),
+            voteBriberyContract.methods.reward_amount(vote.index, rewardTokenAddress).call(),
+            votesSourceContract.methods.getVoterState(vote.index, account.address).call(),
+            voteBriberyContract.methods.has_claimed(vote.index, rewardTokenAddress, account.address).call()
+          ]);
+
+          const rewardToken = await this._getTokenInfo(web3, rewardTokenAddress)
+
+          return {
+            estimateBribe: BigNumber(estimateBribe).div(10**rewardToken.decimals).toFixed(rewardToken.decimals),
+            rewardAmount: BigNumber(rewardAmount).div(10**rewardToken.decimals).toFixed(rewardToken.decimals),
+            voterState,
+            hsaClaimed,
+            vote,
+            rewardToken
+          }
+        })
+      )
+
+      return rewards
+    }))
+
+    return res.filter((reward) => {
+      return reward != null
+    }).flat()
+  }
+
   _getBribery = async (web3, account, gauges, rewardTokens, rewardTokenAddress) => {
     const block = await web3.eth.getBlockNumber();
 
     const bribery = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_ADDRESS)
     const briberyV2 = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_ADDRESS_V2)
     const briberyTokensContract = new web3.eth.Contract(BRIBERY_ABI, BRIBERY_TOKENS_ADDRESS_V2)
-
-    //For V1, baad, loop through all the gauges etc.
-    // let briberyResultsV1 = await Promise.all(gauges.map(async (gauge) => {
-    //   const [activePeriod, claimable, lastUserClaim, rewardPerToken] = await Promise.all([
-    //     bribery.methods.active_period(gauge.gaugeAddress, rewardTokenAddress).call(),
-    //     bribery.methods.claimable(account.address, gauge.gaugeAddress, rewardTokenAddress).call(),
-    //     bribery.methods.last_user_claim(account.address, gauge.gaugeAddress, rewardTokenAddress).call(),
-    //     bribery.methods.reward_per_token(gauge.gaugeAddress, rewardTokenAddress).call(),
-    //   ]);
-    //
-    //   if(BigNumber(activePeriod).eq(0)) {
-    //     return null
-    //   }
-    //
-    //   return {
-    //     version: 1,
-    //     claimable,
-    //     lastUserClaim,
-    //     activePeriod,
-    //     rewardPerToken,
-    //     tokensForBribe: 0,
-    //     canClaim: BigNumber(block).lt(BigNumber(activePeriod).plus(WEEK)),
-    //     hasClaimed: BigNumber(lastUserClaim).eq(activePeriod),
-    //     gauge: gauge,
-    //     rewardToken: rewardTokens.filter((r) => { return r.address.toLowerCase() === rewardTokenAddress.toLowerCase() })[0]
-    //   }
-    // }))
-    // briberyResultsV1 = briberyResultsV1.filter((bribe) => {
-    //   return bribe !== null
-    // })
-
 
     // For V2 call gauges_per_reward.
     // foreach of those, we get the user's reward only. no looping through dead gauges anymore.
@@ -431,7 +503,7 @@ class Store {
           tokensForBribe,
           rewardPerToken,
           canClaim: BigNumber(block).lt(BigNumber(activePeriod).plus(WEEK)),
-          hasClaimed: BigNumber(lastUserClaim).eq(activePeriod),
+          4: BigNumber(lastUserClaim).eq(activePeriod),
           gauge: gauges.filter((g) => { return g.gaugeAddress.toLowerCase() === gauge.toLowerCase() })[0],
           rewardToken: rewardTokens.filter((r) => { return r.address.toLowerCase() === rewardTokenAddress.toLowerCase() })[0]
         }
@@ -532,10 +604,9 @@ class Store {
           return this.emitter.emit(ERROR, err);
         }
 
-        return this.emitter.emit(REWARD_CLAIMED, res);
+        return this.emitter.emit(ADD_REWARD_RETURNED, res);
       });
     })
-
   }
 
   _checkAllowance = async (web3, token, owner, spender, spendingAmount, callback) => {
@@ -555,6 +626,42 @@ class Store {
     const gasPrice = await stores.accountStore.getGasPrice();
 
     this._callContractWait(web3, bribery, 'add_reward_amount', [gauge, rewardToken, rewardAmount], account, gasPrice, GET_INCENTIVES_BALANCES, {}, callback);
+  };
+
+  addVoteReward = async (payload) => {
+    const account = stores.accountStore.getStore('account');
+    if (!account) {
+      return false;
+    }
+
+    const web3 = await stores.accountStore.getWeb3Provider();
+    if (!web3) {
+      return false;
+    }
+
+    const { rewardToken, rewardAmount, vote } = payload.content;
+
+    let sendAmount = BigNumber(rewardAmount).times(10**rewardToken.decimals).toFixed(0)
+
+    this._checkAllowance(web3, rewardToken.address, account.address, VOTE_BRIBERY_ADDRESS, sendAmount, (err) => {
+      if (err) {
+        return this.emitter.emit(ERROR, err);
+      }
+      this._callAddVoteReward(web3, account, vote.index, rewardToken.address, sendAmount, (err, res) => {
+        if (err) {
+          return this.emitter.emit(ERROR, err);
+        }
+
+        return this.emitter.emit(ADD_VOTE_REWARD_RETURNED, res);
+      });
+    })
+  }
+
+  _callAddVoteReward = async (web3, account, voteIndex, rewardToken, rewardAmount, callback) => {
+    const bribery = new web3.eth.Contract(VOTE_BRIBERY_ABI, VOTE_BRIBERY_ADDRESS);
+    const gasPrice = await stores.accountStore.getGasPrice();
+
+    this._callContractWait(web3, bribery, 'add_reward_amount', [voteIndex, rewardToken, rewardAmount], account, gasPrice, GET_INCENTIVES_BALANCES, {}, callback);
   };
 
   _callContract = (web3, contract, method, params, account, gasPrice, dispatchEvent, dispatchEventPayload, callback) => {

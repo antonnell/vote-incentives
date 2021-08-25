@@ -61,6 +61,7 @@
   align-items: flex-start;
   background: #f3f3f3;
   margin-left: 800px;
+  padding-bottom: 48px;
 }
 
 .listContainerDark {
@@ -69,6 +70,7 @@
   align-items: flex-start;
   background: #141C2F;
   margin-left: 800px;
+  padding-bottom: 48px;
 }
 
 .cardsContainer {
@@ -227,6 +229,16 @@
   padding: 24px 80px;
   max-width: 1000px;
   margin-top: 40px !important;
+}
+
+.addButtons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.skelly {
+  border-radius: 30px;
 }
 
 @media screen and (max-width: 1700px) {

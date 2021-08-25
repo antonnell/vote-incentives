@@ -14,7 +14,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import classes from './define.module.css';
 
 import stores from '../../../stores/index.js';
-import { ERROR, ACCOUNT_CHANGED, CONNECT_WALLET, INCENTIVES_CONFIGURED, SEARCH_TOKEN, SEARCH_TOKEN_RETURNED, ADD_REWARD, ADD_REWARD_RETURNED } from '../../../stores/constants';
+import { ERROR, ACCOUNT_CHANGED, CONNECT_WALLET, INCENTIVES_CONFIGURED, SEARCH_TOKEN, SEARCH_TOKEN_RETURNED, ADD_VOTE_REWARD, ADD_VOTE_REWARD_RETURNED } from '../../../stores/constants';
 
 import { formatCurrency, formatAddress } from '../../../utils';
 
@@ -80,7 +80,7 @@ function Voting({ changeTheme, theme }) {
 
   const [ searching, setSearching ] = useState(false)
   const [ search, setSearch ] = useState('')
-  const [ gauge, setGauge ] = useState([])
+  const [ vote, setVote ] = useState([])
 
   const [ rewardTokenAddress, setRewardTokenAddress ] = useState('')
   const [ rewardAmount, setRewardAmount ] = useState('')
@@ -98,10 +98,10 @@ function Voting({ changeTheme, theme }) {
     }
 
     const configureReturned = async () => {
-      const gs = stores.incentivesStore.getStore('gauges')
-      const v = gs.filter((gg) => { return gg.gaugeAddress === router.query.address });
+      const gs = stores.incentivesStore.getStore('votes')
+      const v = gs.filter((gg) => { return gg.index == parseInt(router.query.voteID) });
       if(v.length > 0) {
-        setGauge(v[0])
+        setVote(v[0])
       }
       setWeb3(await stores.accountStore.getWeb3Provider())
     }
@@ -125,12 +125,13 @@ function Voting({ changeTheme, theme }) {
     stores.emitter.on(ACCOUNT_CHANGED, accountChanged);
     stores.emitter.on(INCENTIVES_CONFIGURED, configureReturned)
     stores.emitter.on(SEARCH_TOKEN_RETURNED, searchReturned)
-    stores.emitter.on(ADD_REWARD_RETURNED, addRewardReturned);
+    stores.emitter.on(ADD_VOTE_REWARD_RETURNED, addRewardReturned);
 
-    const gs = stores.incentivesStore.getStore('gauges')
-    const v = gs.filter((gg) => { return gg.gaugeAddress === router.query.address });
+    const gs = stores.incentivesStore.getStore('votes')
+    console.log(router.query)
+    const v = gs.filter((gg) => { return gg.index == parseInt(router.query.voteID) });
     if(v.length > 0) {
-      setGauge(v[0])
+      setVote(v[0])
     }
     setWeb3(await stores.accountStore.getWeb3Provider())
 
@@ -139,7 +140,7 @@ function Voting({ changeTheme, theme }) {
       stores.emitter.removeListener(ACCOUNT_CHANGED, accountChanged);
       stores.emitter.removeListener(INCENTIVES_CONFIGURED, configureReturned);
       stores.emitter.removeListener(SEARCH_TOKEN_RETURNED, searchReturned);
-      stores.emitter.removeListener(ADD_REWARD_RETURNED, addRewardReturned);
+      stores.emitter.removeListener(ADD_VOTE_REWARD_RETURNED, addRewardReturned);
     };
   }, []);
 
@@ -149,11 +150,11 @@ function Voting({ changeTheme, theme }) {
 
   const onSubmit = () => {
     setLoading(true)
-    stores.dispatcher.dispatch({ type: ADD_REWARD, content: { rewardToken, rewardAmount, gauge } })
+    stores.dispatcher.dispatch({ type: ADD_VOTE_REWARD, content: { rewardToken, rewardAmount, vote } })
   }
 
   const onBackClicked = () => {
-    router.push(`/add`);
+    router.push(`/addVote`);
   }
 
   const onRewardTokenAddressChanged = (e) => {
@@ -188,12 +189,12 @@ function Voting({ changeTheme, theme }) {
           </div>
           <Paper className={ classes.actionContainer }>
             <div className={ classes.selectedField }>
-              <img src={ gauge.logo } width='55px' height='55px' className={ classes.assetIcon } />
+              <img src={ '/Curve.png' } width='55px' height='55px' className={ classes.assetIcon } />
               <div className={ classes.assetDetails }>
-                <Typography className={ classes.assetNameText }>{ gauge ? gauge.name : ''}</Typography>
-                <Typography color='textSecondary' className={ classes.assetNameSubText }>{ gauge ? formatAddress(gauge.gaugeAddress) : '' }</Typography>
+                <Typography className={ classes.assetNameText }>Proposal #{ vote ? vote.index : ''}</Typography>
+                <Typography color='textSecondary' className={ classes.assetNameSubText }>{ vote ? `https://dao.curve.fi/vote/ownership/${vote.index}` : '' }</Typography>
               </div>
-              <Typography className={ classes.selectedPoolText } color='textSecondary'>Selected Pool</Typography>
+              <Typography className={ classes.selectedPoolText } color='textSecondary'>Selected Proposal</Typography>
             </div>
             <div className={ classes.inputContainer }>
               <Typography className={ classes.inputFieldTitle }>Add Reward Token Address:</Typography>

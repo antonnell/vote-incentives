@@ -1,0 +1,112 @@
+.container {
+
+}
+
+.headContainer {
+  background: transparent url('../../../public/Group 4869.png') 0% 0% no-repeat padding-box;
+  position: relative;
+  z-index: 9;
+  position: sticky;
+  top: 0px;
+}
+
+.headContainerContent {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.selectPool {
+  font: normal normal bold 32px/38px Grtsk Giga !important;
+  letter-spacing: 2.88px !important;
+  color: #FFFFFF !important;
+  padding-bottom: 12px;
+  padding-top: 12px;
+}
+
+.choosePool {
+  text-align: center !important;
+  font: normal normal 300 17px/20px Inter !important;
+  letter-spacing: -0.34px !important;
+  color: #FFFFFF !important;
+  padding-bottom: 160px;
+}
+
+.actionContainer {
+  position: absolute;
+  top: 183px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-width: 700px;
+  padding: 24px;
+}
+
+.selectedField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  border-bottom: 1px solid #eff0f3;
+  padding-bottom: 17px;
+}
+
+.assetIcon {
+  border-radius: 30px;
+  margin-right: 24px;
+}
+
+.assetDetails {
+  flex: 1;
+}
+
+.selectedPoolText {
+  font: normal normal medium 15px/35px Inter !important;
+}
+
+.assetNameText {
+  font: normal normal bold 20px/35px Inter !important;
+}
+
+.assetNameSubText {
+  font: normal normal medium 15px/35px Inter !important;
+}
+
+.inputContainer {
+  padding-top: 48px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.inputFieldTitle {
+  font: normal normal bold 20px/35px Inter !important;
+  margin-bottom: 40px !important
+}
+
+.outlinedInput {
+}
+
+.availableText {
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+}
+
+.rewardText {
+  margin: 0 auto !important;
+  margin-top: 24px !important;
+  margin-bottom: 40px !important;
+  max-width: 600px !important;
+}
+
+.bigButton {
+  max-width: 600px !important;
+  margin: 0 auto;
+}
+
+.inputButton {
+  box-shadow: none !important;
+}
