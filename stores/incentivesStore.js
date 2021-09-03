@@ -303,6 +303,11 @@ class Store {
         symbol: 'ALCX',
         decimals: 18
       },
+      {
+        address: '0x9D79d5B61De59D882ce90125b18F74af650acB93',
+        symbol: 'NSBT',
+        decimals: 6
+      }
     ]
   }
 
