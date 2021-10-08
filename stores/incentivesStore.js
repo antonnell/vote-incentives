@@ -136,6 +136,7 @@ class Store {
         votesSourceContract.methods.getVote(index).call(),
         votesBriberyContract.methods.rewards_per_vote(index).call()
       ]);
+
       return {
         index,
         vote,
@@ -513,7 +514,7 @@ class Store {
           tokensForBribe,
           rewardPerToken,
           canClaim: BigNumber(block).lt(BigNumber(activePeriod).plus(WEEK)),
-          4: BigNumber(lastUserClaim).eq(activePeriod),
+          hasClaimed: BigNumber(lastUserClaim).eq(activePeriod),
           gauge: gauges.filter((g) => { return g.gaugeAddress.toLowerCase() === gauge.toLowerCase() })[0],
           rewardToken: rewardTokens.filter((r) => { return r.address.toLowerCase() === rewardTokenAddress.toLowerCase() })[0]
         }
