@@ -318,6 +318,11 @@ class Store {
         address: '0x92e187a03b6cd19cb6af293ba17f2745fd2357d5',
         symbol: 'DUCK',
         decimals: 18
+      },
+      {
+        address: '0x8207c1FfC5B6804F6024322CcF34F29c3541Ae26',
+        symbol: 'OGN',
+        decimals: 18
       }
     ]
   }
