@@ -323,6 +323,11 @@ class Store {
         address: '0x8207c1FfC5B6804F6024322CcF34F29c3541Ae26',
         symbol: 'OGN',
         decimals: 18
+      },
+      {
+        address: '0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2',
+        symbol: 'MTA',
+        decimals: 18
       }
     ]
   }
