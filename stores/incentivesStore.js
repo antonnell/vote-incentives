@@ -328,6 +328,11 @@ class Store {
         address: '0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2',
         symbol: 'MTA',
         decimals: 18
+      },
+      {
+        address: '0xd533a949740bb3306d119cc777fa900ba034cd52',
+        symbol: 'CRV',
+        decimals: 18
       }
     ]
   }
