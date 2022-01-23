@@ -333,7 +333,13 @@ class Store {
         address: '0xd533a949740bb3306d119cc777fa900ba034cd52',
         symbol: 'CRV',
         decimals: 18
-      }
+      },
+      {
+        address: '0xcdf7028ceab81fa0c6971208e83fa7872994bee5',
+        symbol: 'T',
+        decimals: 18
+      },
+
     ]
   }
 
