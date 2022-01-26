@@ -339,6 +339,11 @@ class Store {
         symbol: 'T',
         decimals: 18
       },
+      {
+        address: '0xdb25f211ab05b1c97d595516f45794528a807ad8',
+        symbol: 'EURS',
+        decimals: 2
+      },
 
     ]
   }
