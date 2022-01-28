@@ -344,6 +344,11 @@ class Store {
         symbol: 'EURS',
         decimals: 2
       },
+      {
+        address: '0x31429d1856aD1377A8A0079410B297e1a9e214c2',
+        symbol: 'ANGLE',
+        decimals: 18,
+      },
 
     ]
   }
