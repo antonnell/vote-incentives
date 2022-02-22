@@ -166,8 +166,11 @@ class Store {
       });
 
       const result = await Promise.all(promises);
+      const res = result.filter((g) => {
+        return g !== null
+      })
 
-      return result
+      return res
     } catch(ex) {
       console.log("------------------------------------")
       console.log(`exception thrown in _getGauges(${web3})`)
@@ -179,7 +182,6 @@ class Store {
   _getGaugeInfo = async (web3, gaugeController, index) => {
     try {
       const gaugeAddress = await gaugeController.methods.gauges(index).call()
-
       const [gaugeType, gaugeWeight] = await Promise.all([
         gaugeController.methods.gauge_types(gaugeAddress).call(),
         gaugeController.methods.gauge_relative_weight(gaugeAddress).call()
@@ -245,7 +247,7 @@ class Store {
       console.log(`exception thrown in _getGaugeInfo(${web3}, ${gaugeController}, ${index})`)
       console.log(ex)
       console.log("------------------------------------")
-      return ex
+      return null
     }
   }
 
